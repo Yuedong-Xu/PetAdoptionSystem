@@ -88,7 +88,43 @@ Adoption request status
 -completed
 
 
+## Use Case Diagram
+
+- Surrender Owner
+Register/Manage Profile
+Submit Surrender Request
+Enter Pet Information
+View Request Status
+
+- Shelter Admin
+Review Surrender Request
+Accept/Reject Pet Intake
+Create Pet Record
+Send Medical Check Request
+Review Medical Report
+Manage Pet Status
+Review Adoption Applications
+Approve / Reject Adoption
+
+- Vet Staff
+View Medical Check Requests
+Enter Examination Results
+Update Pet Health Status
+Submit Medical Report
 
 
-## Current Status
-Initial project planning and role definition completed.
+- Adopter
+Register/Manage Profile
+Browse Available Pets
+Submit Adoption Application
+View Adoption Status
+
+
+
+
+
+
+
+
+
+
