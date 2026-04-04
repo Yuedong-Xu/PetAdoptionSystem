@@ -15,12 +15,23 @@ This project is a digital pet adoption system that helps shelters and veterinary
 - Vet Staff
 
 ## Main Workflow
-1. A surrender owner submits a pet surrender request.
-2. The shelter reviews the request and accepts the pet.
-3. The shelter sends the pet for a medical check.
-4. The veterinary clinic updates the pet's health record.
-5. Adopters browse available pets and submit adoption applications.
-6. The shelter reviews the application and updates the final adoption status.
+
+1. Surrender Process
+- A surrender owner submits a surrender request
+- Shelter admin reviews the request
+- If approved, the pet is accepted and a pet record is created
+
+2. Medical Check Process
+- Shelter sends the pet to a veterinary clinic
+- Vet staff performs a medical check
+- Vet updates the health record
+- Pet status is updated to "Ready for Adoption"
+
+3. Adoption Process
+- Adopter browses available pets
+- Adopter submits an adoption application
+- Shelter admin reviews the application
+- If approved, the pet status is updated to "Adopted"
 
 ## Role Definition
 - Surrender Owner
@@ -54,6 +65,29 @@ Set adoption preferences
 Browse available pets
 Submit adoption applications
 View adoption application status
+
+## Status
+
+Pet status
+-submitted
+-accepted
+-under medical check
+-ready for adoption
+-adoption pending
+-adopted
+
+Surrender request status
+-submitted
+-approved
+-rejected
+
+Adoption request status
+-submitted 
+-approved
+-rejected
+-completed
+
+
 
 
 ## Current Status
