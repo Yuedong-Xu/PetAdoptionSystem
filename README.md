@@ -120,7 +120,322 @@ Submit Adoption Application
 View Adoption Status
 
 
+## Class Diagram
 
+1）UI 
+MainFrame
+
+Attributes
+
+system: PetAdoptionSystem
+cardLayout: CardLayout
+mainPanel: JPanel
+
+Methods
+
+MainFrame()
+switchPanel(panelName: String)
+initComponents()
+LoginPanel
+
+Attributes
+
+usernameField: JTextField
+passwordField: JPasswordField
+system: PetAdoptionSystem
+mainFrame: MainFrame
+
+Methods
+
+login()
+clearFields()
+SurrenderOwnerPanel
+
+Attributes
+
+system: PetAdoptionSystem
+currentUser: SurrenderOwner
+petTable: JTable
+
+Methods
+
+submitSurrenderRequest()
+enterPetInformation()
+viewRequestStatus()
+AdopterPanel
+
+Attributes
+
+system: PetAdoptionSystem
+currentUser: Adopter
+petTable: JTable
+
+Methods
+
+browsePets()
+submitAdoptionApplication()
+viewAdoptionStatus()
+ShelterAdminPanel
+
+Attributes
+
+system: PetAdoptionSystem
+currentUser: ShelterAdmin
+requestTable: JTable
+
+Methods
+
+reviewSurrenderRequests()
+createPetRecord()
+sendMedicalCheckRequest()
+reviewAdoptionApplications()
+updatePetStatus()
+VetStaffPanel
+
+Attributes
+
+system: PetAdoptionSystem
+currentUser: VetStaff
+requestTable: JTable
+
+Methods
+
+viewMedicalCheckRequests()
+enterExaminationResults()
+updatePetHealthStatus()
+submitMedicalReport()
+
+
+2）Core
+PetAdoptionSystem <<Singleton>>
+
+Attributes
+
+instance: PetAdoptionSystem
+userDAO: UserDAO
+organizationDAO: OrganizationDAO
+petDAO: PetDAO
+surrenderRequestDAO: SurrenderRequestDAO
+adoptionApplicationDAO: AdoptionApplicationDAO
+medicalCheckRequestDAO: MedicalCheckRequestDAO
+medicalReportDAO: MedicalReportDAO
+
+Methods
+
+getInstance(): PetAdoptionSystem
+authenticateUser(email: String, password: String): User
+getAvailablePets(): List<Pet>
+createSurrenderRequest(...)
+createAdoptionApplication(...)
+createMedicalCheckRequest(...)
+createMedicalReport(...)
+updateRequestStatus(...)
+
+3）DAO 
+UserDAO
+
+Attributes
+
+db: DatabaseManager
+
+Methods
+
+createUser(user: User): void
+getUserById(id: int): User
+getUserByEmail(email: String): User
+updateUser(user: User): void
+deleteUser(id: int): void
+OrganizationDAO
+createOrganization()
+getOrganizationById()
+getAllOrganizations()
+updateOrganization()
+deleteOrganization()
+PetDAO
+createPet()
+getPetById()
+getAllPets()
+getAvailablePets()
+updatePet()
+deletePet()
+SurrenderRequestDAO
+createRequest()
+getRequestById()
+getAllRequests()
+updateRequest()
+deleteRequest()
+AdoptionApplicationDAO
+createApplication()
+getApplicationById()
+getAllApplications()
+updateApplication()
+deleteApplication()
+MedicalCheckRequestDAO
+createRequest()
+getRequestById()
+getAllRequests()
+updateRequest()
+deleteRequest()
+MedicalReportDAO
+createReport()
+getReportById()
+getReportsByPetId()
+updateReport()
+deleteReport()
+
+4）Database 
+DatabaseManager
+
+Attributes
+
+connection: Connection
+
+Methods
+
+connect(): void
+closeConnection(): void
+executeQuery(sql: String): ResultSet
+executeUpdate(sql: String): int
+
+5）Model 
+User <<abstract>>
+
+Attributes
+
+userId: int
+name: String
+email: String
+password: String
+phone: String
+address: String
+
+Methods
+
+login()
+updateProfile()
+Adopter
+
+Attributes
+
+preference: String
+housingType: String
+
+Methods
+
+submitAdoptionApplication()
+SurrenderOwner
+
+Attributes
+
+ownerNote: String
+
+Methods
+
+submitSurrenderRequest()
+ShelterAdmin
+
+Attributes
+
+employeeId: String
+
+Methods
+
+reviewRequest()
+updatePetStatus()
+VetStaff
+
+Attributes
+
+staffId: String
+
+Methods
+
+createMedicalReport()
+updateHealthStatus()
+Organization <<abstract>>
+
+Attributes
+
+organizationId: int
+name: String
+address: String
+phone: String
+
+Methods
+
+updateOrganizationInfo()
+Shelter
+
+Methods
+
+acceptPet()
+publishPet()
+VeterinaryClinic
+
+Methods
+
+performCheckup()
+Pet
+
+Attributes
+
+petId: int
+name: String
+species: String
+breed: String
+age: int
+gender: String
+healthStatus: String
+adoptionStatus: String
+intakeDate: Date
+
+Methods
+
+updateHealthStatus()
+updateAdoptionStatus()
+WorkRequest <<abstract>>
+
+Attributes
+
+requestId: int
+requestDate: Date
+status: String
+description: String
+
+Methods
+
+createRequest()
+updateStatus()
+SurrenderRequest
+
+Attributes
+
+reason: String
+AdoptionApplication
+
+Attributes
+
+adopterNote: String
+MedicalCheckRequest
+
+Attributes
+
+priority: String
+MedicalReport
+
+Attributes
+
+reportId: int
+examDate: Date
+diagnosis: String
+vaccinationStatus: String
+recommendation: String
+resultStatus: String
+
+Methods
+
+generateReport()
+submitReport()
 
 
 
