@@ -9,6 +9,8 @@ package com.vincent.petadoptionsystem.service;
  * @author Yuedong Xu
  */
 import com.vincent.petadoptionsystem.dao.AdoptionApplicationDAO;
+import com.vincent.petadoptionsystem.dao.MedicalCheckRequestDAO;
+import com.vincent.petadoptionsystem.model.MedicalCheckRequest;
 import com.vincent.petadoptionsystem.dao.PetDAO;
 import com.vincent.petadoptionsystem.dao.UserDAO;
 import com.vincent.petadoptionsystem.model.AdoptionApplication;
@@ -22,11 +24,13 @@ public class PetAdoptionSystem {
     private AdoptionApplicationDAO adoptionApplicationDAO;
     private UserDAO userDAO;
     private PetDAO petDAO;
+    private MedicalCheckRequestDAO medicalCheckRequestDAO;
 
     private PetAdoptionSystem() {
         userDAO = new UserDAO();
         petDAO = new PetDAO();
         adoptionApplicationDAO = new AdoptionApplicationDAO();
+        medicalCheckRequestDAO = new MedicalCheckRequestDAO();
     }
 
     public static PetAdoptionSystem getInstance() {
@@ -61,5 +65,16 @@ public class PetAdoptionSystem {
     }
     public boolean reviewAdoptionApplication(int applicationId, String status, int handledByUserId) {
     return adoptionApplicationDAO.reviewApplication(applicationId, status, handledByUserId);
+}
+   public boolean createMedicalCheckRequest(int petId, int createdByUserId) {
+    return medicalCheckRequestDAO.createMedicalCheckRequest(petId, createdByUserId);
+}
+
+public List<MedicalCheckRequest> getAllMedicalCheckRequests() {
+    return medicalCheckRequestDAO.getAllMedicalCheckRequests();
+}
+
+public boolean submitMedicalReport(int requestId, int vetUserId, String reportNotes, String newHealthStatus) {
+    return medicalCheckRequestDAO.submitMedicalReport(requestId, vetUserId, reportNotes, newHealthStatus);
 }
 }

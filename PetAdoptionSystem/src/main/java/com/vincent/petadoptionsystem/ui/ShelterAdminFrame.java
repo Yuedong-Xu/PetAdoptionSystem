@@ -69,6 +69,7 @@ public ShelterAdminFrame() {
         ReviewAdoptionButton.addActionListener(this::ReviewAdoptionButtonActionPerformed);
 
         SendButton.setText("Send Medical Check Request");
+        SendButton.addActionListener(this::SendButtonActionPerformed);
 
         LogoutButton.setText("Logout");
 
@@ -190,6 +191,42 @@ private void setupApplicationTable() {
     loadAllApplications();
 
     }//GEN-LAST:event_RefreshButtonActionPerformed
+
+    private void SendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SendButtonActionPerformed
+        // TODO add your handling code here:
+        
+    int selectedRow = ApplicationTable.getSelectedRow();
+
+    if (selectedRow == -1) {
+        JOptionPane.showMessageDialog(this, "Please select an adoption application first.");
+        return;
+    }
+
+    if (currentUser == null) {
+        JOptionPane.showMessageDialog(this, "Current admin user is missing.");
+        return;
+    }
+
+    DefaultTableModel model = (DefaultTableModel) ApplicationTable.getModel();
+
+    int applicationId = Integer.parseInt(model.getValueAt(selectedRow, 0).toString());
+    int petId = Integer.parseInt(model.getValueAt(selectedRow, 3).toString());
+    String currentStatus = model.getValueAt(selectedRow, 7).toString();
+
+    if (!"Submitted".equalsIgnoreCase(currentStatus) && !"Approved".equalsIgnoreCase(currentStatus)) {
+        JOptionPane.showMessageDialog(this, "Medical check request can only be sent for Submitted or Approved applications.");
+        return;
+    }
+
+  boolean success = system.createMedicalCheckRequest(petId, currentUser.getUserId());
+
+    if (success) {
+        JOptionPane.showMessageDialog(this, "Medical check request sent successfully.");
+    } else {
+        JOptionPane.showMessageDialog(this, "Request failed. Please check the console output for the exact database error.");
+    }
+
+    }//GEN-LAST:event_SendButtonActionPerformed
 private void loadAllApplications() {
     List<AdoptionApplication> applicationList = system.getAllAdoptionApplications();
 

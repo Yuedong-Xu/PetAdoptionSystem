@@ -8,17 +8,35 @@ package com.vincent.petadoptionsystem.ui;
  *
  * @author vincent
  */
+import com.vincent.petadoptionsystem.model.MedicalCheckRequest;
+import com.vincent.petadoptionsystem.model.User;
+import com.vincent.petadoptionsystem.service.PetAdoptionSystem;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 public class VetStaffFrame extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VetStaffFrame.class.getName());
-
+private final PetAdoptionSystem system;
+private final User currentUser;
     /**
      * Creates new form VetStaffFrame
      */
-    public VetStaffFrame() {
-        initComponents();
-    }
+    public VetStaffFrame(User user) {
+    this.currentUser = user;
+    this.system = PetAdoptionSystem.getInstance();
+    initComponents();
+    setLocationRelativeTo(null);
+    setupMedicalTable();
+}
 
+public VetStaffFrame() {
+    this.currentUser = null;
+    this.system = PetAdoptionSystem.getInstance();
+    initComponents();
+    setLocationRelativeTo(null);
+    setupMedicalTable();
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -32,17 +50,34 @@ public class VetStaffFrame extends javax.swing.JFrame {
         ViewMedicalButton = new javax.swing.JButton();
         SubmitMedicalButton = new javax.swing.JButton();
         LogoutButton = new javax.swing.JButton();
+        MedicalScrollPane = new javax.swing.JScrollPane();
+        MedicalTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Vet Staff Dashboard");
 
         ViewMedicalButton.setText("View Medical Check Requests");
+        ViewMedicalButton.addActionListener(this::ViewMedicalButtonActionPerformed);
 
         SubmitMedicalButton.setText("Submit Medical Report");
+        SubmitMedicalButton.addActionListener(this::SubmitMedicalButtonActionPerformed);
 
         LogoutButton.setText("Logout");
         LogoutButton.addActionListener(this::LogoutButtonActionPerformed);
+
+        MedicalTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        MedicalScrollPane.setViewportView(MedicalTable);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -56,10 +91,12 @@ public class VetStaffFrame extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(36, 36, 36)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(SubmitMedicalButton)
                             .addComponent(ViewMedicalButton)
-                            .addComponent(LogoutButton))))
-                .addContainerGap(155, Short.MAX_VALUE))
+                            .addComponent(SubmitMedicalButton)
+                            .addComponent(LogoutButton))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
+                        .addComponent(MedicalScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 482, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(37, 37, 37))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -67,12 +104,15 @@ public class VetStaffFrame extends javax.swing.JFrame {
                 .addGap(14, 14, 14)
                 .addComponent(jLabel1)
                 .addGap(31, 31, 31)
-                .addComponent(ViewMedicalButton)
-                .addGap(31, 31, 31)
-                .addComponent(SubmitMedicalButton)
-                .addGap(46, 46, 46)
-                .addComponent(LogoutButton)
-                .addContainerGap(92, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(ViewMedicalButton)
+                        .addGap(31, 31, 31)
+                        .addComponent(SubmitMedicalButton)
+                        .addGap(46, 46, 46)
+                        .addComponent(LogoutButton))
+                    .addComponent(MedicalScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 331, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
 
         pack();
@@ -80,8 +120,114 @@ public class VetStaffFrame extends javax.swing.JFrame {
 
     private void LogoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutButtonActionPerformed
         // TODO add your handling code here:
+        
+    new MainFrame().setVisible(true);
+    this.dispose();
     }//GEN-LAST:event_LogoutButtonActionPerformed
 
+    private void ViewMedicalButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ViewMedicalButtonActionPerformed
+        // TODO add your handling code here:
+        
+    loadMedicalRequests();
+
+    }//GEN-LAST:event_ViewMedicalButtonActionPerformed
+
+    private void SubmitMedicalButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubmitMedicalButtonActionPerformed
+        // TODO add your handling code here:
+    int selectedRow = MedicalTable.getSelectedRow();
+
+    if (selectedRow == -1) {
+        JOptionPane.showMessageDialog(this, "Please select a medical check request first.");
+        return;
+    }
+
+    if (currentUser == null) {
+        JOptionPane.showMessageDialog(this, "Current vet user is missing.");
+        return;
+    }
+
+    DefaultTableModel model = (DefaultTableModel) MedicalTable.getModel();
+
+    int requestId = Integer.parseInt(model.getValueAt(selectedRow, 0).toString());
+    String currentStatus = model.getValueAt(selectedRow, 6).toString();
+
+    if (!"Submitted".equalsIgnoreCase(currentStatus) && !"In Progress".equalsIgnoreCase(currentStatus)) {
+    JOptionPane.showMessageDialog(this, "Only Submitted or In Progress requests can be completed.");
+    return;
+}
+
+    String reportNotes = JOptionPane.showInputDialog(this, "Enter medical report notes:");
+    if (reportNotes == null || reportNotes.trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Medical report notes cannot be empty.");
+        return;
+    }
+
+    Object[] options = {"Healthy", "Needs Treatment", "Under Observation"};
+    String newHealthStatus = (String) JOptionPane.showInputDialog(
+            this,
+            "Select new health status:",
+            "Health Status",
+            JOptionPane.PLAIN_MESSAGE,
+            null,
+            options,
+            options[0]
+    );
+
+    if (newHealthStatus == null || newHealthStatus.trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Please select a health status.");
+        return;
+    }
+
+    boolean success = system.submitMedicalReport(
+            requestId,
+            currentUser.getUserId(),
+            reportNotes,
+            newHealthStatus
+    );
+
+    if (success) {
+        JOptionPane.showMessageDialog(this, "Medical report submitted successfully.");
+        loadMedicalRequests();
+    } else {
+        JOptionPane.showMessageDialog(this, "Failed to submit medical report.");
+    }
+    }//GEN-LAST:event_SubmitMedicalButtonActionPerformed
+private void setupMedicalTable() {
+    MedicalTable.setModel(new DefaultTableModel(
+        new Object[][]{},
+        new String[]{
+            "Request ID", "Pet ID", "Pet Name",
+            "Shelter ID", "Clinic ID", "Request Date",
+            "Status", "Description", "Created By", "Handled By", "Processed At"
+        }
+    ));
+}
+private void loadMedicalRequests() {
+    List<MedicalCheckRequest> requestList = system.getAllMedicalCheckRequests();
+
+    DefaultTableModel model = (DefaultTableModel) MedicalTable.getModel();
+    model.setRowCount(0);
+
+    for (MedicalCheckRequest request : requestList) {
+        model.addRow(new Object[]{
+    request.getMedicalCheckRequestId(),
+    request.getPetId(),
+    request.getPetName(),
+    request.getShelterId(),
+    request.getClinicId(),
+    request.getRequestDate(),
+    request.getStatus(),
+    request.getDescription(),
+    request.getCreatedByUserId(),
+    request.getHandledByUserId(),
+    request.getProcessedAt()
+});
+    }
+
+    if (requestList.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "No medical check requests found.");
+    }
+}
     /**
      * @param args the command line arguments
      */
@@ -109,6 +255,8 @@ public class VetStaffFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton LogoutButton;
+    private javax.swing.JScrollPane MedicalScrollPane;
+    private javax.swing.JTable MedicalTable;
     private javax.swing.JButton SubmitMedicalButton;
     private javax.swing.JButton ViewMedicalButton;
     private javax.swing.JLabel jLabel1;

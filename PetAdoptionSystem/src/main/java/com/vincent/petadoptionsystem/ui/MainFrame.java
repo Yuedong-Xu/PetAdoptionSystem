@@ -141,7 +141,7 @@ private void openRoleWindow(User user) {
             new ShelterAdminFrame(user).setVisible(true);
             break;
         case "VetStaff":
-            new VetStaffFrame().setVisible(true);
+            new VetStaffFrame(user).setVisible(true);
             break;
         default:
             JOptionPane.showMessageDialog(this, "Unknown role.");

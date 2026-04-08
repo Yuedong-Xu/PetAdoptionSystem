@@ -24,8 +24,8 @@ public class PetDAO {
     List<Pet> petList = new ArrayList<>();
 
     String sql = "SELECT PetId, Name, Species, Breed, Age, Gender, Color, HealthStatus, AdoptionStatus " +
-                 "FROM Pets " +
-                 "WHERE AdoptionStatus = 'Available'";
+             "FROM Pets " +
+             "WHERE AdoptionStatus = 'Ready for Adoption'";
 
     try (Connection conn = DatabaseManager.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql);
