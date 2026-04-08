@@ -3,21 +3,41 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.vincent.petadoptionsystem.ui;
-
+import com.vincent.petadoptionsystem.model.AdoptionApplication;
+import com.vincent.petadoptionsystem.model.User;
+import com.vincent.petadoptionsystem.service.PetAdoptionSystem;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 /**
  *
- * @author vincent
+ * @author Yuedong Xu
  */
 public class ShelterAdminFrame extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ShelterAdminFrame.class.getName());
-
+private final PetAdoptionSystem system;
+private final User currentUser;
     /**
      * Creates new form ShelterAdminFrame
      */
-    public ShelterAdminFrame() {
-        initComponents();
-    }
+    public ShelterAdminFrame(User user) {
+    this.currentUser = user;
+    this.system = PetAdoptionSystem.getInstance();
+    initComponents();
+    setLocationRelativeTo(null);
+
+    setupApplicationTable();
+}
+
+public ShelterAdminFrame() {
+    this.currentUser = null;
+    this.system = PetAdoptionSystem.getInstance();
+    initComponents();
+    setLocationRelativeTo(null);
+
+    setupApplicationTable();
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -33,6 +53,11 @@ public class ShelterAdminFrame extends javax.swing.JFrame {
         ReviewAdoptionButton = new javax.swing.JButton();
         SendButton = new javax.swing.JButton();
         LogoutButton = new javax.swing.JButton();
+        ApplicationScrollPane = new javax.swing.JScrollPane();
+        ApplicationTable = new javax.swing.JTable();
+        ApproveButton = new javax.swing.JButton();
+        RejectButton = new javax.swing.JButton();
+        RefreshButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -47,47 +72,183 @@ public class ShelterAdminFrame extends javax.swing.JFrame {
 
         LogoutButton.setText("Logout");
 
+        ApplicationTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        ApplicationScrollPane.setViewportView(ApplicationTable);
+
+        ApproveButton.setText("Approve");
+        ApproveButton.addActionListener(this::ApproveButtonActionPerformed);
+
+        RejectButton.setText("Reject");
+        RejectButton.addActionListener(this::RejectButtonActionPerformed);
+
+        RefreshButton.setText("Refresh");
+        RefreshButton.addActionListener(this::RefreshButtonActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(42, 42, 42)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ReviewAdoptionButton)
+                    .addComponent(ReviewButton)
+                    .addComponent(SendButton)
+                    .addComponent(LogoutButton))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                        .addComponent(ApplicationScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 585, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(84, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(113, 113, 113)
-                        .addComponent(ShelterLabel))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(42, 42, 42)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(ReviewAdoptionButton)
-                            .addComponent(ReviewButton)
-                            .addComponent(SendButton)
-                            .addComponent(LogoutButton))))
-                .addContainerGap(138, Short.MAX_VALUE))
+                        .addGap(74, 74, 74)
+                        .addComponent(ApproveButton)
+                        .addGap(132, 132, 132)
+                        .addComponent(RejectButton)
+                        .addGap(112, 112, 112)
+                        .addComponent(RefreshButton)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(113, 113, 113)
+                .addComponent(ShelterLabel)
+                .addGap(34, 34, 34))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(ShelterLabel)
-                .addGap(26, 26, 26)
-                .addComponent(ReviewButton)
-                .addGap(34, 34, 34)
-                .addComponent(ReviewAdoptionButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
-                .addComponent(SendButton)
-                .addGap(34, 34, 34)
-                .addComponent(LogoutButton)
-                .addGap(47, 47, 47))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addComponent(ShelterLabel)
+                        .addGap(26, 26, 26)
+                        .addComponent(ReviewButton)
+                        .addGap(34, 34, 34)
+                        .addComponent(ReviewAdoptionButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(SendButton)
+                        .addGap(34, 34, 34))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(72, Short.MAX_VALUE)
+                        .addComponent(ApplicationScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(14, 14, 14)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(LogoutButton)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(ApproveButton)
+                            .addComponent(RejectButton)
+                            .addComponent(RefreshButton))))
+                .addGap(35, 35, 35))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+private void setupApplicationTable() {
+    ApplicationTable.setModel(new DefaultTableModel(
+        new Object[][]{},
+        new String[]{
+            "Application ID", "User ID", "Adopter Name",
+            "Pet ID", "Pet Name", "Species", "Breed", "Status"
+        }
+    ));
+}
     private void ReviewAdoptionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReviewAdoptionButtonActionPerformed
         // TODO add your handling code here:
+        
+    loadAllApplications();
+
     }//GEN-LAST:event_ReviewAdoptionButtonActionPerformed
 
+    private void ApproveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ApproveButtonActionPerformed
+        // TODO add your handling code here:
+        
+    updateSelectedApplication("Approved");
+
+    }//GEN-LAST:event_ApproveButtonActionPerformed
+
+    private void RejectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RejectButtonActionPerformed
+        // TODO add your handling code here:
+
+    updateSelectedApplication("Rejected");
+
+    }//GEN-LAST:event_RejectButtonActionPerformed
+
+    private void RefreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshButtonActionPerformed
+        // TODO add your handling code here:
+
+    loadAllApplications();
+
+    }//GEN-LAST:event_RefreshButtonActionPerformed
+private void loadAllApplications() {
+    List<AdoptionApplication> applicationList = system.getAllAdoptionApplications();
+
+    DefaultTableModel model = (DefaultTableModel) ApplicationTable.getModel();
+    model.setRowCount(0);
+
+    for (AdoptionApplication application : applicationList) {
+        model.addRow(new Object[]{
+            application.getApplicationId(),
+            application.getUserId(),
+            application.getAdopterName(),
+            application.getPetId(),
+            application.getPetName(),
+            application.getSpecies(),
+            application.getBreed(),
+            application.getStatus()
+        });
+    }
+
+    if (applicationList.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "No adoption applications found.");
+    }
+}
+private void updateSelectedApplication(String newStatus) {
+    int selectedRow = ApplicationTable.getSelectedRow();
+
+    if (selectedRow == -1) {
+        JOptionPane.showMessageDialog(this, "Please select an application first.");
+        return;
+    }
+
+    if (currentUser == null) {
+        JOptionPane.showMessageDialog(this, "Current admin user is missing.");
+        return;
+    }
+
+    DefaultTableModel model = (DefaultTableModel) ApplicationTable.getModel();
+
+    int applicationId = Integer.parseInt(model.getValueAt(selectedRow, 0).toString());
+    String currentStatus = model.getValueAt(selectedRow, 7).toString();
+
+    if (!"Submitted".equalsIgnoreCase(currentStatus)) {
+        JOptionPane.showMessageDialog(this, "Only applications with status Submitted can be updated.");
+        return;
+    }
+
+    boolean success = system.reviewAdoptionApplication(
+    applicationId,
+    newStatus,
+    currentUser.getUserId()
+);
+
+    if (success) {
+        JOptionPane.showMessageDialog(this, "Application " + newStatus + " successfully.");
+        loadAllApplications();
+    } else {
+        JOptionPane.showMessageDialog(this, "Failed to update application status.");
+    }
+}
     /**
      * @param args the command line arguments
      */
@@ -112,9 +273,18 @@ public class ShelterAdminFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new ShelterAdminFrame().setVisible(true));
     }
+    private void LogoutButtonActionPerformed(java.awt.event.ActionEvent evt) {
+    new MainFrame().setVisible(true);
+    this.dispose();
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane ApplicationScrollPane;
+    private javax.swing.JTable ApplicationTable;
+    private javax.swing.JButton ApproveButton;
     private javax.swing.JButton LogoutButton;
+    private javax.swing.JButton RefreshButton;
+    private javax.swing.JButton RejectButton;
     private javax.swing.JButton ReviewAdoptionButton;
     private javax.swing.JButton ReviewButton;
     private javax.swing.JButton SendButton;

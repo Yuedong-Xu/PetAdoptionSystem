@@ -8,9 +8,6 @@ package com.vincent.petadoptionsystem.service;
  *
  * @author Yuedong Xu
  */
-
-
-
 import com.vincent.petadoptionsystem.dao.AdoptionApplicationDAO;
 import com.vincent.petadoptionsystem.dao.PetDAO;
 import com.vincent.petadoptionsystem.dao.UserDAO;
@@ -54,4 +51,15 @@ public class PetAdoptionSystem {
     public List<AdoptionApplication> getApplicationsByUserId(int userId) {
         return adoptionApplicationDAO.getApplicationsByUserId(userId);
     }
+
+    public List<AdoptionApplication> getAllAdoptionApplications() {
+        return adoptionApplicationDAO.getAllApplications();
+    }
+
+    public boolean updateAdoptionApplicationStatus(int applicationId, String status, int handledByUserId) {
+        return adoptionApplicationDAO.updateApplicationStatus(applicationId, status, handledByUserId);
+    }
+    public boolean reviewAdoptionApplication(int applicationId, String status, int handledByUserId) {
+    return adoptionApplicationDAO.reviewApplication(applicationId, status, handledByUserId);
+}
 }

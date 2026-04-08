@@ -9,8 +9,10 @@ package com.vincent.petadoptionsystem.model;
  * @author Yuedong Xu
  */
 
-
 public class AdoptionApplication {
+    private int applicationId;
+    private int userId;
+    private String adopterName;
     private int petId;
     private String petName;
     private String species;
@@ -18,6 +20,30 @@ public class AdoptionApplication {
     private String status;
 
     public AdoptionApplication() {
+    }
+
+    public int getApplicationId() {
+        return applicationId;
+    }
+
+    public void setApplicationId(int applicationId) {
+        this.applicationId = applicationId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public String getAdopterName() {
+        return adopterName;
+    }
+
+    public void setAdopterName(String adopterName) {
+        this.adopterName = adopterName;
     }
 
     public int getPetId() {

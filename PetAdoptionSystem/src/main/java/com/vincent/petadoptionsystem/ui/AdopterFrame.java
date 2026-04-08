@@ -153,8 +153,10 @@ private boolean showingPetList = false;
 
     private void BrowsePetsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BrowsePetsButtonActionPerformed
         // TODO add your handling code here:
-        
-   
+    loadAvailablePets();
+
+    }//GEN-LAST:event_BrowsePetsButtonActionPerformed
+private void loadAvailablePets() {
     List<Pet> petList = system.getAvailablePets();
     showingPetList = true;
 
@@ -179,9 +181,7 @@ private boolean showingPetList = false;
     }
 
     petTable.setModel(model);
-
-    }//GEN-LAST:event_BrowsePetsButtonActionPerformed
-
+}
     private void SubmitApplicationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubmitApplicationButtonActionPerformed
         // TODO add your handling code here:
         
@@ -210,10 +210,11 @@ private boolean showingPetList = false;
     boolean success = system.createAdoptionApplication(currentUser.getUserId(), petId);
 
     if (success) {
-        JOptionPane.showMessageDialog(this, "Adoption application submitted successfully!");
-    } else {
-        JOptionPane.showMessageDialog(this, "Failed to submit application.");
-    }
+    JOptionPane.showMessageDialog(this, "Adoption application submitted successfully!");
+    loadAvailablePets();
+} else {
+    JOptionPane.showMessageDialog(this, "Application failed. You may have already applied for this pet.");
+}
 
 
 
