@@ -1,6 +1,7 @@
 com/vincent/petadoptionsystem/ui/MainFrame.class
 com/vincent/petadoptionsystem/ui/VetStaffFrame.class
 com/vincent/petadoptionsystem/dao/MedicalCheckRequestDAO.class
+com/vincent/petadoptionsystem/dao/SurrenderRequestDAO.class
 com/vincent/petadoptionsystem/dao/UserDAO.class
 com/vincent/petadoptionsystem/db/TestConnection.class
 com/vincent/petadoptionsystem/db/DatabaseManager.class
@@ -9,6 +10,7 @@ com/vincent/petadoptionsystem/service/PetAdoptionSystem.class
 com/vincent/petadoptionsystem/model/MedicalCheckRequest.class
 com/vincent/petadoptionsystem/ui/ShelterAdminFrame.class
 com/vincent/petadoptionsystem/dao/AdoptionApplicationDAO.class
+com/vincent/petadoptionsystem/model/SurrenderRequest.class
 com/vincent/petadoptionsystem/ui/AdopterFrame.class
 com/vincent/petadoptionsystem/util/DBConfig.class
 com/vincent/petadoptionsystem/PetAdoptionSystem.class

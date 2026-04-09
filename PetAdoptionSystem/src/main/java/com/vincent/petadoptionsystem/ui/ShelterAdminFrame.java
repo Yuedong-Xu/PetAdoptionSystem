@@ -9,6 +9,7 @@ import com.vincent.petadoptionsystem.service.PetAdoptionSystem;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import com.vincent.petadoptionsystem.model.SurrenderRequest;
 /**
  *
  * @author Yuedong Xu
@@ -18,6 +19,7 @@ public class ShelterAdminFrame extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ShelterAdminFrame.class.getName());
 private final PetAdoptionSystem system;
 private final User currentUser;
+private boolean viewingSurrenderRequests = false;
     /**
      * Creates new form ShelterAdminFrame
      */
@@ -64,6 +66,7 @@ public ShelterAdminFrame() {
         ShelterLabel.setText("Shelter Admin Dashboard");
 
         ReviewButton.setText("Review Surrender Requests");
+        ReviewButton.addActionListener(this::ReviewButtonActionPerformed);
 
         ReviewAdoptionButton.setText("Review Adoption Applications");
         ReviewAdoptionButton.addActionListener(this::ReviewAdoptionButtonActionPerformed);
@@ -72,6 +75,7 @@ public ShelterAdminFrame() {
         SendButton.addActionListener(this::SendButtonActionPerformed);
 
         LogoutButton.setText("Logout");
+        LogoutButton.addActionListener(this::LogoutButtonActionPerformed);
 
         ApplicationTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -108,21 +112,21 @@ public ShelterAdminFrame() {
                     .addComponent(LogoutButton))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
-                        .addComponent(ApplicationScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 585, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(84, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                        .addComponent(ApplicationScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addGap(74, 74, 74)
                         .addComponent(ApproveButton)
-                        .addGap(132, 132, 132)
+                        .addGap(180, 180, 180)
                         .addComponent(RejectButton)
-                        .addGap(112, 112, 112)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(RefreshButton)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(151, 151, 151))))
             .addGroup(layout.createSequentialGroup()
                 .addGap(113, 113, 113)
                 .addComponent(ShelterLabel)
-                .addGap(34, 34, 34))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -163,6 +167,82 @@ private void setupApplicationTable() {
             "Pet ID", "Pet Name", "Species", "Breed", "Status"
         }
     ));
+    viewingSurrenderRequests = false;
+}
+private void setupSurrenderTable() {
+    ApplicationTable.setModel(new DefaultTableModel(
+        new Object[][]{},
+        new String[]{
+            "Request ID", "User ID", "Owner Name",
+            "Pet ID", "Pet Name", "Request Date",
+            "Status", "Reason", "Description", "Handled By", "Processed At"
+        }
+    ));
+    viewingSurrenderRequests = true;
+}
+private void loadAllSurrenderRequests() {
+    List<SurrenderRequest> requestList = system.getAllSurrenderRequests();
+    setupSurrenderTable();
+
+    DefaultTableModel model = (DefaultTableModel) ApplicationTable.getModel();
+    model.setRowCount(0);
+
+    for (SurrenderRequest request : requestList) {
+        model.addRow(new Object[]{
+            request.getSurrenderRequestId(),
+            request.getUserId(),
+            request.getOwnerName(),
+            request.getPetId(),
+            request.getPetName(),
+            request.getRequestDate(),
+            request.getStatus(),
+            request.getReason(),
+            request.getDescription(),
+            request.getHandledByUserId(),
+            request.getProcessedAt()
+        });
+    }
+
+    if (requestList.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "No surrender requests found.");
+    }
+}
+private void updateSelectedSurrenderRequest(String newStatus) {
+    int selectedRow = ApplicationTable.getSelectedRow();
+
+    if (selectedRow == -1) {
+        JOptionPane.showMessageDialog(this, "Please select a surrender request first.");
+        return;
+    }
+
+    if (currentUser == null) {
+        JOptionPane.showMessageDialog(this, "Current admin user is missing.");
+        return;
+    }
+
+    DefaultTableModel model = (DefaultTableModel) ApplicationTable.getModel();
+
+    int requestId = Integer.parseInt(model.getValueAt(selectedRow, 0).toString());
+    String currentStatus = model.getValueAt(selectedRow, 6).toString();
+
+    if (!"Submitted".equalsIgnoreCase(currentStatus)) {
+        JOptionPane.showMessageDialog(this, "Only surrender requests with status Submitted can be updated.");
+        return;
+    }
+
+    boolean success = system.reviewSurrenderRequest(
+            requestId,
+            newStatus,
+            currentUser.getUserId(),
+            currentUser.getOrganizationId()
+    );
+
+    if (success) {
+        JOptionPane.showMessageDialog(this, "Surrender request " + newStatus + " successfully.");
+        loadAllSurrenderRequests();
+    } else {
+        JOptionPane.showMessageDialog(this, "Failed to update surrender request.");
+    }
 }
     private void ReviewAdoptionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReviewAdoptionButtonActionPerformed
         // TODO add your handling code here:
@@ -173,28 +253,40 @@ private void setupApplicationTable() {
 
     private void ApproveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ApproveButtonActionPerformed
         // TODO add your handling code here:
-        
+     if (viewingSurrenderRequests) {
+    updateSelectedSurrenderRequest("Approved");
+} else {
     updateSelectedApplication("Approved");
+}
 
     }//GEN-LAST:event_ApproveButtonActionPerformed
 
     private void RejectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RejectButtonActionPerformed
         // TODO add your handling code here:
-
+if (viewingSurrenderRequests) {
+    updateSelectedSurrenderRequest("Rejected");
+} else {
     updateSelectedApplication("Rejected");
+}
 
     }//GEN-LAST:event_RejectButtonActionPerformed
 
     private void RefreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshButtonActionPerformed
         // TODO add your handling code here:
-
+if (viewingSurrenderRequests) {
+    loadAllSurrenderRequests();
+} else {
     loadAllApplications();
+}
 
     }//GEN-LAST:event_RefreshButtonActionPerformed
 
     private void SendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SendButtonActionPerformed
         // TODO add your handling code here:
-        
+     if (viewingSurrenderRequests) {
+    JOptionPane.showMessageDialog(this, "Please switch to Adoption Applications first.");
+    return;
+}   
     int selectedRow = ApplicationTable.getSelectedRow();
 
     if (selectedRow == -1) {
@@ -227,6 +319,17 @@ private void setupApplicationTable() {
     }
 
     }//GEN-LAST:event_SendButtonActionPerformed
+
+    private void ReviewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReviewButtonActionPerformed
+        // TODO add your handling code here:
+        loadAllSurrenderRequests();
+    }//GEN-LAST:event_ReviewButtonActionPerformed
+
+    private void LogoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutButtonActionPerformed
+        // TODO add your handling code here:
+        new MainFrame().setVisible(true);
+this.dispose();
+    }//GEN-LAST:event_LogoutButtonActionPerformed
 private void loadAllApplications() {
     List<AdoptionApplication> applicationList = system.getAllAdoptionApplications();
 
@@ -310,10 +413,7 @@ private void updateSelectedApplication(String newStatus) {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new ShelterAdminFrame().setVisible(true));
     }
-    private void LogoutButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    new MainFrame().setVisible(true);
-    this.dispose();
-}
+  
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane ApplicationScrollPane;

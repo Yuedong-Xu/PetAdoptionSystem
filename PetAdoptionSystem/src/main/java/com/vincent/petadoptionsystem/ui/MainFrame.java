@@ -135,7 +135,7 @@ private void openRoleWindow(User user) {
             new AdopterFrame(user).setVisible(true);
             break;
         case "SurrenderOwner":
-            new SurrenderOwnerFrame().setVisible(true);
+            new SurrenderOwnerFrame(user).setVisible(true);
             break;
         case "ShelterAdmin":
             new ShelterAdminFrame(user).setVisible(true);

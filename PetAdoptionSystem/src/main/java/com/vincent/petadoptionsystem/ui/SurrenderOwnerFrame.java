@@ -8,16 +8,34 @@ package com.vincent.petadoptionsystem.ui;
  *
  * @author vincent
  */
+import com.vincent.petadoptionsystem.model.SurrenderRequest;
+import com.vincent.petadoptionsystem.model.User;
+import com.vincent.petadoptionsystem.service.PetAdoptionSystem;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 public class SurrenderOwnerFrame extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(SurrenderOwnerFrame.class.getName());
-
+private final PetAdoptionSystem system;
+private final User currentUser;
     /**
      * Creates new form SurrenderOwnerFrame
      */
-    public SurrenderOwnerFrame() {
-        initComponents();
-    }
+    public SurrenderOwnerFrame(User user) {
+    this.currentUser = user;
+    this.system = PetAdoptionSystem.getInstance();
+    initComponents();
+    setLocationRelativeTo(null);
+}
+
+public SurrenderOwnerFrame() {
+    this.currentUser = null;
+    this.system = PetAdoptionSystem.getInstance();
+    initComponents();
+    setLocationRelativeTo(null);
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -32,6 +50,13 @@ public class SurrenderOwnerFrame extends javax.swing.JFrame {
         SubmitSurrenderButton = new javax.swing.JButton();
         ViewMyRequestsButton = new javax.swing.JButton();
         LogoutButton = new javax.swing.JButton();
+        PetIdTextField = new javax.swing.JTextField();
+        ReasonTextField = new javax.swing.JTextField();
+        DescriptionScrollBar = new javax.swing.JScrollPane();
+        DescriptionTextArea = new javax.swing.JTextArea();
+        PetIdLabel = new javax.swing.JLabel();
+        ReasonLabel = new javax.swing.JLabel();
+        DescriptionLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -41,39 +66,92 @@ public class SurrenderOwnerFrame extends javax.swing.JFrame {
         SubmitSurrenderButton.addActionListener(this::SubmitSurrenderButtonActionPerformed);
 
         ViewMyRequestsButton.setText("View My Requests");
+        ViewMyRequestsButton.addActionListener(this::ViewMyRequestsButtonActionPerformed);
 
         LogoutButton.setText("Logout");
         LogoutButton.addActionListener(this::LogoutButtonActionPerformed);
+
+        ReasonTextField.addActionListener(this::ReasonTextFieldActionPerformed);
+
+        DescriptionTextArea.setColumns(20);
+        DescriptionTextArea.setRows(5);
+        DescriptionScrollBar.setViewportView(DescriptionTextArea);
+
+        PetIdLabel.setText("Pet ID:");
+
+        ReasonLabel.setText("Reason:");
+
+        DescriptionLabel.setText("Description:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(113, 113, 113)
-                        .addComponent(SurrenderLabel))
-                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(SurrenderLabel)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(39, 39, 39)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(ViewMyRequestsButton)
-                            .addComponent(SubmitSurrenderButton)
-                            .addComponent(LogoutButton))))
-                .addContainerGap(121, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(ViewMyRequestsButton)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(LogoutButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(DescriptionLabel)
+                                .addGap(237, 237, 237))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(SubmitSurrenderButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 260, Short.MAX_VALUE)
+                                .addComponent(PetIdLabel)
+                                .addGap(18, 18, 18)
+                                .addComponent(PetIdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(ReasonLabel)
+                        .addGap(18, 18, 18)
+                        .addComponent(ReasonTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(107, 107, 107))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(540, 540, 540)
+                .addComponent(DescriptionScrollBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addComponent(SurrenderLabel)
-                .addGap(32, 32, 32)
-                .addComponent(SubmitSurrenderButton)
-                .addGap(61, 61, 61)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addComponent(SubmitSurrenderButton))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(PetIdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(PetIdLabel))))
+                .addGap(33, 33, 33)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ReasonTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ReasonLabel))
+                .addGap(5, 5, 5)
                 .addComponent(ViewMyRequestsButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
-                .addComponent(LogoutButton)
-                .addGap(46, 46, 46))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(LogoutButton)
+                        .addGap(46, 46, 46))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(DescriptionScrollBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(19, 19, 19))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(DescriptionLabel)
+                        .addGap(61, 61, 61))))
         );
 
         pack();
@@ -81,11 +159,100 @@ public class SurrenderOwnerFrame extends javax.swing.JFrame {
 
     private void SubmitSurrenderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubmitSurrenderButtonActionPerformed
         // TODO add your handling code here:
+       if (currentUser == null) {
+    JOptionPane.showMessageDialog(this, "Current user is missing.");
+    return;
+}
+
+String petIdInput = PetIdTextField.getText().trim();
+String reason = ReasonTextField.getText().trim();
+String description = DescriptionTextArea.getText().trim();
+
+if (petIdInput.isEmpty()) {
+    JOptionPane.showMessageDialog(this, "Please enter Pet ID.");
+    return;
+}
+
+int petId;
+try {
+    petId = Integer.parseInt(petIdInput);
+} catch (NumberFormatException e) {
+    JOptionPane.showMessageDialog(this, "Pet ID must be a number.");
+    return;
+}
+
+if (reason.isEmpty()) {
+    JOptionPane.showMessageDialog(this, "Please enter surrender reason.");
+    return;
+}
+
+boolean success = system.createSurrenderRequest(
+        currentUser.getUserId(),
+        petId,
+        reason,
+        description
+);
+
+if (success) {
+    JOptionPane.showMessageDialog(this, "Surrender request submitted successfully.");
+
+    PetIdTextField.setText("");
+    ReasonTextField.setText("");
+    DescriptionTextArea.setText("");
+} else {
+    JOptionPane.showMessageDialog(this, "Submission failed. You may already have an active request for this pet.");
+}
     }//GEN-LAST:event_SubmitSurrenderButtonActionPerformed
 
     private void LogoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutButtonActionPerformed
         // TODO add your handling code here:
+        new MainFrame().setVisible(true);
+this.dispose();
     }//GEN-LAST:event_LogoutButtonActionPerformed
+
+    private void ViewMyRequestsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ViewMyRequestsButtonActionPerformed
+        // TODO add your handling code here:
+        if (currentUser == null) {
+    JOptionPane.showMessageDialog(this, "Current user is missing.");
+    return;
+}
+
+List<SurrenderRequest> requestList = system.getSurrenderRequestsByUserId(currentUser.getUserId());
+
+if (requestList.isEmpty()) {
+    JOptionPane.showMessageDialog(this, "You have not submitted any surrender requests yet.");
+    return;
+}
+
+StringBuilder sb = new StringBuilder();
+for (SurrenderRequest request : requestList) {
+    sb.append("Request ID: ").append(request.getSurrenderRequestId()).append("\n")
+      .append("Pet ID: ").append(request.getPetId()).append("\n")
+      .append("Pet Name: ").append(request.getPetName()).append("\n")
+      .append("Status: ").append(request.getStatus()).append("\n")
+      .append("Reason: ").append(request.getReason()).append("\n")
+      .append("Description: ").append(request.getDescription()).append("\n")
+      .append("Request Date: ").append(request.getRequestDate()).append("\n")
+      .append("Processed At: ").append(request.getProcessedAt()).append("\n")
+      .append("--------------------------------------\n");
+}
+
+JTextArea textArea = new JTextArea(sb.toString(), 18, 40);
+textArea.setEditable(false);
+textArea.setLineWrap(true);
+textArea.setWrapStyleWord(true);
+
+JOptionPane.showMessageDialog(
+        this,
+        new JScrollPane(textArea),
+        "My Surrender Requests",
+        JOptionPane.INFORMATION_MESSAGE
+);
+    }//GEN-LAST:event_ViewMyRequestsButtonActionPerformed
+
+    private void ReasonTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReasonTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ReasonTextFieldActionPerformed
 
     /**
      * @param args the command line arguments
@@ -113,7 +280,14 @@ public class SurrenderOwnerFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel DescriptionLabel;
+    private javax.swing.JScrollPane DescriptionScrollBar;
+    private javax.swing.JTextArea DescriptionTextArea;
     private javax.swing.JButton LogoutButton;
+    private javax.swing.JLabel PetIdLabel;
+    private javax.swing.JTextField PetIdTextField;
+    private javax.swing.JLabel ReasonLabel;
+    private javax.swing.JTextField ReasonTextField;
     private javax.swing.JButton SubmitSurrenderButton;
     private javax.swing.JLabel SurrenderLabel;
     private javax.swing.JButton ViewMyRequestsButton;
