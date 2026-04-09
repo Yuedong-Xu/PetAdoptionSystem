@@ -29,8 +29,10 @@ private boolean viewingMedicalRequests = false;
     this.currentUser = user;
     this.system = PetAdoptionSystem.getInstance();
     initComponents();
-    setLocationRelativeTo(null);
 
+    CancelMedicalButton.addActionListener(this::CancelMedicalButtonActionPerformed);
+
+    setLocationRelativeTo(null);
     setupApplicationTable();
 }
 
@@ -38,8 +40,10 @@ public ShelterAdminFrame() {
     this.currentUser = null;
     this.system = PetAdoptionSystem.getInstance();
     initComponents();
-    setLocationRelativeTo(null);
 
+    CancelMedicalButton.addActionListener(this::CancelMedicalButtonActionPerformed);
+
+    setLocationRelativeTo(null);
     setupApplicationTable();
 }
 
@@ -185,6 +189,7 @@ private void setupApplicationTable() {
         }
     ));
     viewingSurrenderRequests = false;
+    viewingMedicalRequests = false;
 }
 private void setupSurrenderTable() {
     ApplicationTable.setModel(new DefaultTableModel(
@@ -202,7 +207,13 @@ private void setupSurrenderTable() {
 private void loadAllApplications() {
     setupApplicationTable();
 
-    List<AdoptionApplication> applicationList = system.getAllAdoptionApplications();
+    if (currentUser == null || currentUser.getOrganizationId() == null) {
+        JOptionPane.showMessageDialog(this, "Current shelter organization is missing.");
+        return;
+    }
+
+    List<AdoptionApplication> applicationList =
+            system.getAdoptionApplicationsByShelterId(currentUser.getOrganizationId());
 
     DefaultTableModel model = (DefaultTableModel) ApplicationTable.getModel();
     model.setRowCount(0);
@@ -227,7 +238,7 @@ private void loadAllApplications() {
     }
 
     if (applicationList.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "No adoption applications found.");
+        JOptionPane.showMessageDialog(this, "No adoption applications found for your shelter.");
     }
 }
 private void updateSelectedSurrenderRequest(String newStatus) {

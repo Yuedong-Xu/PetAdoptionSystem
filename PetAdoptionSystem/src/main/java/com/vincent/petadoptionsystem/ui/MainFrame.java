@@ -28,13 +28,13 @@ private PetAdoptionSystem system;
     DemoAccountsTextArea.setLineWrap(true);
     DemoAccountsTextArea.setWrapStyleWord(true);
     DemoAccountsTextArea.setText(
-            "Use your seeded demo accounts below:\n" +
-            "Adopter: adopter@test.com / 123456\n" +
-            "Surrender Owner: owner@test.com / 123456\n" +
-            "Shelter Admin: shelter@test.com / 123456\n" +
-            "Vet Staff: vet@test.com / 123456"
-          
-    );
+        "Use your seeded demo accounts below:\n" +
+        "Adopter 1: adopter1@test.com / 123456\n" +
+        "Adopter 2: adopter2@test.com / 123456\n" +
+        "Surrender Owner: owner@test.com / 123456\n" +
+        "Shelter Admin: shelter@test.com / 123456\n" +
+        "Vet Staff: vet@test.com / 123456"
+);
     DemoAccountsTextArea.setCaretPosition(0);
 
     setLocationRelativeTo(null);
