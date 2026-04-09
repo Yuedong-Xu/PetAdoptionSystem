@@ -11,7 +11,7 @@ package com.vincent.petadoptionsystem.dao;
 
 import com.vincent.petadoptionsystem.db.DatabaseManager;
 import com.vincent.petadoptionsystem.model.SurrenderRequest;
-
+import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,54 +20,114 @@ import java.util.List;
 
 public class SurrenderRequestDAO {
 
-    public boolean createSurrenderRequest(int userId, int petId, String reason, String description) {
-        String duplicateSql = "SELECT COUNT(*) FROM SurrenderRequests " +
-                              "WHERE UserId = ? AND PetId = ? AND Status IN ('Submitted', 'Approved')";
+    
+        public boolean createSurrenderRequest(
+        int userId,
+        String petName,
+        String species,
+        String breed,
+        int age,
+        String gender,
+        double weight,
+        String color,
+        String healthStatus,
+        String reason,
+        String description
+) {
+    Connection conn = null;
 
-        String insertSql = "INSERT INTO SurrenderRequests " +
-                           "(UserId, PetId, RequestDate, Status, Description, Reason, HandledByUserId, ProcessedAt) " +
-                           "VALUES (?, ?, NOW(), 'Submitted', ?, ?, NULL, NULL)";
+    try {
+        conn = DatabaseManager.getConnection();
+        conn.setAutoCommit(false);
 
-        try (Connection conn = DatabaseManager.getConnection()) {
+        int petId = -1;
 
-            try (PreparedStatement checkPs = conn.prepareStatement(duplicateSql)) {
-                checkPs.setInt(1, userId);
-                checkPs.setInt(2, petId);
+        String insertPetSql = "INSERT INTO Pets " +
+                "(Name, Species, Breed, Age, Gender, Weight, Color, HealthStatus, " +
+                "HealthCheckStatus, AdoptionStatus, IntakeDate, ShelterId, CreatedAt) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'Pending', 'Submitted', CURDATE(), NULL, NOW())";
 
-                try (ResultSet rs = checkPs.executeQuery()) {
-                    if (rs.next() && rs.getInt(1) > 0) {
-                        return false;
-                    }
+        try (PreparedStatement petPs = conn.prepareStatement(insertPetSql, Statement.RETURN_GENERATED_KEYS)) {
+            petPs.setString(1, petName);
+            petPs.setString(2, species);
+            petPs.setString(3, breed);
+            petPs.setInt(4, age);
+            petPs.setString(5, gender);
+            petPs.setDouble(6, weight);
+            petPs.setString(7, color);
+            petPs.setString(8, healthStatus);
+
+            int rows = petPs.executeUpdate();
+            if (rows == 0) {
+                conn.rollback();
+                return false;
+            }
+
+            try (ResultSet keys = petPs.getGeneratedKeys()) {
+                if (keys.next()) {
+                    petId = keys.getInt(1);
+                } else {
+                    conn.rollback();
+                    return false;
                 }
             }
-
-            try (PreparedStatement insertPs = conn.prepareStatement(insertSql)) {
-                insertPs.setInt(1, userId);
-                insertPs.setInt(2, petId);
-                insertPs.setString(3, description);
-                insertPs.setString(4, reason);
-
-                int rows = insertPs.executeUpdate();
-                return rows > 0;
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
 
-        return false;
+        String insertRequestSql = "INSERT INTO SurrenderRequests " +
+                "(UserId, PetId, RequestDate, Status, Description, Reason, HandledByUserId, ProcessedAt) " +
+                "VALUES (?, ?, NOW(), 'Submitted', ?, ?, NULL, NULL)";
+
+        try (PreparedStatement requestPs = conn.prepareStatement(insertRequestSql)) {
+            requestPs.setInt(1, userId);
+            requestPs.setInt(2, petId);
+            requestPs.setString(3, description);
+            requestPs.setString(4, reason);
+
+            int rows = requestPs.executeUpdate();
+            if (rows == 0) {
+                conn.rollback();
+                return false;
+            }
+        }
+
+        conn.commit();
+        return true;
+
+    } catch (Exception e) {
+        e.printStackTrace();
+
+        if (conn != null) {
+            try {
+                conn.rollback();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    } finally {
+        if (conn != null) {
+            try {
+                conn.setAutoCommit(true);
+                conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
+
+    return false;
+}
 
     public List<SurrenderRequest> getRequestsByUserId(int userId) {
         List<SurrenderRequest> requestList = new ArrayList<>();
 
         String sql = "SELECT sr.SurrenderRequestId, sr.UserId, sr.PetId, p.Name AS PetName, " +
-                     "sr.RequestDate, sr.Status, sr.Description, sr.Reason, " +
-                     "sr.HandledByUserId, sr.ProcessedAt " +
-                     "FROM SurrenderRequests sr " +
-                     "JOIN Pets p ON sr.PetId = p.PetId " +
-                     "WHERE sr.UserId = ? " +
-                     "ORDER BY sr.SurrenderRequestId DESC";
+             "p.Species, p.Breed, p.Age, p.Gender, p.Weight, p.Color, p.HealthStatus, " +
+             "sr.RequestDate, sr.Status, sr.Description, sr.Reason, " +
+             "sr.HandledByUserId, sr.ProcessedAt " +
+             "FROM SurrenderRequests sr " +
+             "JOIN Pets p ON sr.PetId = p.PetId " +
+             "WHERE sr.UserId = ? " +
+             "ORDER BY sr.SurrenderRequestId DESC";
 
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -85,6 +145,13 @@ public class SurrenderRequestDAO {
                     request.setStatus(rs.getString("Status"));
                     request.setDescription(rs.getString("Description"));
                     request.setReason(rs.getString("Reason"));
+                    request.setSpecies(rs.getString("Species"));
+                    request.setBreed(rs.getString("Breed"));
+                    request.setAge(rs.getInt("Age"));
+                    request.setGender(rs.getString("Gender"));
+                    request.setWeight(rs.getDouble("Weight"));
+                    request.setColor(rs.getString("Color"));
+                    request.setHealthStatus(rs.getString("HealthStatus"));
 
                     int handledBy = rs.getInt("HandledByUserId");
                     if (rs.wasNull()) {
@@ -114,12 +181,12 @@ public class SurrenderRequestDAO {
         List<SurrenderRequest> requestList = new ArrayList<>();
 
         String sql = "SELECT sr.SurrenderRequestId, sr.UserId, u.Name AS OwnerName, " +
-                     "sr.PetId, p.Name AS PetName, sr.RequestDate, sr.Status, " +
-                     "sr.Description, sr.Reason, sr.HandledByUserId, sr.ProcessedAt " +
-                     "FROM SurrenderRequests sr " +
-                     "JOIN Users u ON sr.UserId = u.UserId " +
-                     "JOIN Pets p ON sr.PetId = p.PetId " +
-                     "ORDER BY sr.SurrenderRequestId DESC";
+             "sr.PetId, p.Name AS PetName, p.Species, p.Breed, p.Age, p.Gender, p.Weight, p.Color, p.HealthStatus, " +
+             "sr.RequestDate, sr.Status, sr.Description, sr.Reason, sr.HandledByUserId, sr.ProcessedAt " +
+             "FROM SurrenderRequests sr " +
+             "JOIN Users u ON sr.UserId = u.UserId " +
+             "JOIN Pets p ON sr.PetId = p.PetId " +
+             "ORDER BY sr.SurrenderRequestId DESC";
 
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
@@ -136,6 +203,13 @@ public class SurrenderRequestDAO {
                 request.setStatus(rs.getString("Status"));
                 request.setDescription(rs.getString("Description"));
                 request.setReason(rs.getString("Reason"));
+                request.setSpecies(rs.getString("Species"));
+                request.setBreed(rs.getString("Breed"));
+                request.setAge(rs.getInt("Age"));
+                request.setGender(rs.getString("Gender"));
+                request.setWeight(rs.getDouble("Weight"));
+                request.setColor(rs.getString("Color"));
+                request.setHealthStatus(rs.getString("HealthStatus"));
 
                 int handledBy = rs.getInt("HandledByUserId");
                 if (rs.wasNull()) {
@@ -217,7 +291,13 @@ public class SurrenderRequestDAO {
                         petPs.executeUpdate();
                     }
                 }
-            }
+            }else if ("Rejected".equalsIgnoreCase(status)) {
+    String updatePetSql = "UPDATE Pets SET AdoptionStatus = 'Rejected' WHERE PetId = ?";
+    try (PreparedStatement petPs = conn.prepareStatement(updatePetSql)) {
+        petPs.setInt(1, petId);
+        petPs.executeUpdate();
+    }
+}
 
             conn.commit();
             return true;

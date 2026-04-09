@@ -24,90 +24,139 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="113" max="-2" attributes="0"/>
-                      <Component id="SurrenderLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="75" max="-2" attributes="0"/>
+              <Component id="SubmitSurrenderButton" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="125" max="-2" attributes="0"/>
+              <Component id="ViewMyRequestsButton" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="149" max="32767" attributes="0"/>
+              <Component id="LogoutButton" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="121" max="-2" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="211" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="ViewMyRequestsButton" min="-2" max="-2" attributes="0"/>
+                          <Component id="AgeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="SpeciesLabel" min="-2" max="-2" attributes="0"/>
+                          <Component id="ColorLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="HealthLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="ReasonLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="DescriptionLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="WeightLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="GenderLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="173" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="PetNameTextField" min="-2" pref="219" max="-2" attributes="0"/>
+                                  <Component id="SpeciesComboBox" min="-2" max="-2" attributes="0"/>
+                              </Group>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="LogoutButton" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
                               <EmptySpace max="32767" attributes="0"/>
-                              <Component id="DescriptionLabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="237" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="SubmitSurrenderButton" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="260" max="32767" attributes="0"/>
-                              <Component id="PetIdLabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="PetIdTextField" min="-2" pref="219" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="GenderComboBox" min="-2" max="-2" attributes="0"/>
+                                  <Component id="HealthStatusComboBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="ColorTextField" max="32767" attributes="0"/>
+                                      <Component id="DescriptionScrollPane" alignment="0" pref="219" max="32767" attributes="0"/>
+                                      <Component id="WeightTextField" max="32767" attributes="0"/>
+                                  </Group>
+                                  <Component id="BreedTextField" alignment="0" min="-2" pref="219" max="-2" attributes="0"/>
+                                  <Component id="AgeSpinner" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="ReasonComboBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="181" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Component id="ReasonLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="ReasonTextField" min="-2" pref="219" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="PetNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="BreedLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace min="-2" pref="107" max="-2" attributes="0"/>
           </Group>
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="540" max="-2" attributes="0"/>
-              <Component id="DescriptionScrollBar" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="321" max="-2" attributes="0"/>
+              <Component id="SurrenderLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
               <Component id="SurrenderLabel" min="-2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                      <Component id="SubmitSurrenderButton" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="PetIdTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="PetIdLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
+              <EmptySpace min="-2" pref="59" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="PetNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="PetNameTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="SpeciesLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="SpeciesComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="ReasonTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="ReasonLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="BreedLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="BreedTextField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-              <Component id="ViewMyRequestsButton" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="19" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="AgeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="AgeSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="GenderLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="GenderComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
-                      <Component id="LogoutButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <Component id="DescriptionScrollBar" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="1" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="301" max="-2" attributes="0"/>
                       <Component id="DescriptionLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace pref="35" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="WeightTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="WeightLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="ColorTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="ColorLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="HealthLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="HealthStatusComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="ReasonLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="ReasonComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+                      <Component id="DescriptionScrollPane" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
                   </Group>
               </Group>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="SubmitSurrenderButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="ViewMyRequestsButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="LogoutButton" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="87" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -142,14 +191,9 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="LogoutButtonActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="PetIdTextField">
+    <Component class="javax.swing.JTextField" name="PetNameTextField">
     </Component>
-    <Component class="javax.swing.JTextField" name="ReasonTextField">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ReasonTextFieldActionPerformed"/>
-      </Events>
-    </Component>
-    <Container class="javax.swing.JScrollPane" name="DescriptionScrollBar">
+    <Container class="javax.swing.JScrollPane" name="DescriptionScrollPane">
       <AuxValues>
         <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
       </AuxValues>
@@ -164,9 +208,9 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JLabel" name="PetIdLabel">
+    <Component class="javax.swing.JLabel" name="PetNameLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Pet ID:"/>
+        <Property name="text" type="java.lang.String" value="Pet Name:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="ReasonLabel">
@@ -178,6 +222,125 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Description:"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="SpeciesLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Species:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="BreedLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Breed:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="BreedTextField">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BreedTextFieldActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="AgeLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Age:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="GenderLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Gender:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="ColorLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Color:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="ColorTextField">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ColorTextFieldActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="HealthLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Health Status:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="WeightLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Weight(kg):"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="WeightTextField">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="WeightTextFieldActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="SpeciesComboBox">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="7">
+            <StringItem index="0" value="Please select species"/>
+            <StringItem index="1" value="Dog"/>
+            <StringItem index="2" value="Cat"/>
+            <StringItem index="3" value="Rabbit"/>
+            <StringItem index="4" value="Bird"/>
+            <StringItem index="5" value="Hamster"/>
+            <StringItem index="6" value="Other"/>
+          </StringArray>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="GenderComboBox">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="3">
+            <StringItem index="0" value="Please select gender"/>
+            <StringItem index="1" value="Male"/>
+            <StringItem index="2" value="Female"/>
+          </StringArray>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="HealthStatusComboBox">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="6">
+            <StringItem index="0" value="Please select health status"/>
+            <StringItem index="1" value="Healthy"/>
+            <StringItem index="2" value="Needs Treatment"/>
+            <StringItem index="3" value="Under Observation"/>
+            <StringItem index="4" value="Injured"/>
+            <StringItem index="5" value="Unknown"/>
+          </StringArray>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JSpinner" name="AgeSpinner">
+    </Component>
+    <Component class="javax.swing.JComboBox" name="ReasonComboBox">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="7">
+            <StringItem index="0" value="Please select reason"/>
+            <StringItem index="1" value="Moving"/>
+            <StringItem index="2" value="Financial Difficulty"/>
+            <StringItem index="3" value="Allergy"/>
+            <StringItem index="4" value="Behavioral Issues"/>
+            <StringItem index="5" value="Cannot Care Anymore"/>
+            <StringItem index="6" value="Other"/>
+          </StringArray>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>

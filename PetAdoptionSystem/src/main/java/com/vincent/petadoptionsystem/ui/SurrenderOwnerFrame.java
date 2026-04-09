@@ -6,7 +6,7 @@ package com.vincent.petadoptionsystem.ui;
 
 /**
  *
- * @author vincent
+ * @author Yuedong Xu
  */
 import com.vincent.petadoptionsystem.model.SurrenderRequest;
 import com.vincent.petadoptionsystem.model.User;
@@ -22,6 +22,7 @@ private final PetAdoptionSystem system;
 private final User currentUser;
     /**
      * Creates new form SurrenderOwnerFrame
+     * @param user
      */
     public SurrenderOwnerFrame(User user) {
     this.currentUser = user;
@@ -50,13 +51,27 @@ public SurrenderOwnerFrame() {
         SubmitSurrenderButton = new javax.swing.JButton();
         ViewMyRequestsButton = new javax.swing.JButton();
         LogoutButton = new javax.swing.JButton();
-        PetIdTextField = new javax.swing.JTextField();
-        ReasonTextField = new javax.swing.JTextField();
-        DescriptionScrollBar = new javax.swing.JScrollPane();
+        PetNameTextField = new javax.swing.JTextField();
+        DescriptionScrollPane = new javax.swing.JScrollPane();
         DescriptionTextArea = new javax.swing.JTextArea();
-        PetIdLabel = new javax.swing.JLabel();
+        PetNameLabel = new javax.swing.JLabel();
         ReasonLabel = new javax.swing.JLabel();
         DescriptionLabel = new javax.swing.JLabel();
+        SpeciesLabel = new javax.swing.JLabel();
+        BreedLabel = new javax.swing.JLabel();
+        BreedTextField = new javax.swing.JTextField();
+        AgeLabel = new javax.swing.JLabel();
+        GenderLabel = new javax.swing.JLabel();
+        ColorLabel = new javax.swing.JLabel();
+        ColorTextField = new javax.swing.JTextField();
+        HealthLabel = new javax.swing.JLabel();
+        WeightLabel = new javax.swing.JLabel();
+        WeightTextField = new javax.swing.JTextField();
+        SpeciesComboBox = new javax.swing.JComboBox<>();
+        GenderComboBox = new javax.swing.JComboBox<>();
+        HealthStatusComboBox = new javax.swing.JComboBox<>();
+        AgeSpinner = new javax.swing.JSpinner();
+        ReasonComboBox = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -71,87 +86,154 @@ public SurrenderOwnerFrame() {
         LogoutButton.setText("Logout");
         LogoutButton.addActionListener(this::LogoutButtonActionPerformed);
 
-        ReasonTextField.addActionListener(this::ReasonTextFieldActionPerformed);
-
         DescriptionTextArea.setColumns(20);
         DescriptionTextArea.setRows(5);
-        DescriptionScrollBar.setViewportView(DescriptionTextArea);
+        DescriptionScrollPane.setViewportView(DescriptionTextArea);
 
-        PetIdLabel.setText("Pet ID:");
+        PetNameLabel.setText("Pet Name:");
 
         ReasonLabel.setText("Reason:");
 
         DescriptionLabel.setText("Description:");
+
+        SpeciesLabel.setText("Species:");
+
+        BreedLabel.setText("Breed:");
+
+        BreedTextField.addActionListener(this::BreedTextFieldActionPerformed);
+
+        AgeLabel.setText("Age:");
+
+        GenderLabel.setText("Gender:");
+
+        ColorLabel.setText("Color:");
+
+        ColorTextField.addActionListener(this::ColorTextFieldActionPerformed);
+
+        HealthLabel.setText("Health Status:");
+
+        WeightLabel.setText("Weight(kg):");
+
+        WeightTextField.addActionListener(this::WeightTextFieldActionPerformed);
+
+        SpeciesComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Please select species", "Dog", "Cat", "Rabbit", "Bird", "Hamster", "Other" }));
+
+        GenderComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Please select gender", "Male", "Female" }));
+
+        HealthStatusComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Please select health status", "Healthy", "Needs Treatment", "Under Observation", "Injured", "Unknown" }));
+
+        ReasonComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Please select reason", "Moving", "Financial Difficulty", "Allergy", "Behavioral Issues", "Cannot Care Anymore", "Other" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(113, 113, 113)
-                        .addComponent(SurrenderLabel)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(39, 39, 39)
+                .addGap(75, 75, 75)
+                .addComponent(SubmitSurrenderButton)
+                .addGap(125, 125, 125)
+                .addComponent(ViewMyRequestsButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 149, Short.MAX_VALUE)
+                .addComponent(LogoutButton)
+                .addGap(121, 121, 121))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(211, 211, 211)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(AgeLabel)
+                            .addComponent(SpeciesLabel)
+                            .addComponent(ColorLabel)
+                            .addComponent(HealthLabel)
+                            .addComponent(ReasonLabel)
+                            .addComponent(DescriptionLabel)
+                            .addComponent(WeightLabel)
+                            .addComponent(GenderLabel))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(ViewMyRequestsButton)
+                                .addGap(173, 173, 173)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(PetNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(SpeciesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(LogoutButton)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(DescriptionLabel)
-                                .addGap(237, 237, 237))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(SubmitSurrenderButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 260, Short.MAX_VALUE)
-                                .addComponent(PetIdLabel)
-                                .addGap(18, 18, 18)
-                                .addComponent(PetIdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(GenderComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(HealthStatusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(ColorTextField)
+                                        .addComponent(DescriptionScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
+                                        .addComponent(WeightTextField))
+                                    .addComponent(BreedTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(AgeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(ReasonComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(181, 181, 181))))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(ReasonLabel)
-                        .addGap(18, 18, 18)
-                        .addComponent(ReasonTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(107, 107, 107))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(PetNameLabel)
+                            .addComponent(BreedLabel))
+                        .addGap(0, 0, Short.MAX_VALUE))))
             .addGroup(layout.createSequentialGroup()
-                .addGap(540, 540, 540)
-                .addComponent(DescriptionScrollBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(321, 321, 321)
+                .addComponent(SurrenderLabel)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
+                .addGap(19, 19, 19)
                 .addComponent(SurrenderLabel)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addComponent(SubmitSurrenderButton))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(PetIdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(PetIdLabel))))
+                .addGap(59, 59, 59)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(PetNameLabel)
+                    .addComponent(PetNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(35, 35, 35)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(SpeciesLabel)
+                    .addComponent(SpeciesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ReasonTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ReasonLabel))
-                .addGap(5, 5, 5)
-                .addComponent(ViewMyRequestsButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                    .addComponent(BreedLabel)
+                    .addComponent(BreedTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(AgeLabel)
+                    .addComponent(AgeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(GenderLabel)
+                    .addComponent(GenderComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(LogoutButton)
-                        .addGap(46, 46, 46))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(DescriptionScrollBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(19, 19, 19))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(301, 301, 301)
                         .addComponent(DescriptionLabel)
-                        .addGap(61, 61, 61))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(WeightTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(WeightLabel))
+                        .addGap(33, 33, 33)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(ColorTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ColorLabel))
+                        .addGap(43, 43, 43)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(HealthLabel)
+                            .addComponent(HealthStatusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(42, 42, 42)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(ReasonLabel)
+                            .addComponent(ReasonComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(35, 35, 35)
+                        .addComponent(DescriptionScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(54, 54, 54)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(SubmitSurrenderButton)
+                    .addComponent(ViewMyRequestsButton)
+                    .addComponent(LogoutButton))
+                .addGap(87, 87, 87))
         );
 
         pack();
@@ -164,31 +246,78 @@ public SurrenderOwnerFrame() {
     return;
 }
 
-String petIdInput = PetIdTextField.getText().trim();
-String reason = ReasonTextField.getText().trim();
+String petName = PetNameTextField.getText().trim();
+String species = SpeciesComboBox.getSelectedItem().toString();
+String breed = BreedTextField.getText().trim();
+int age = (int) AgeSpinner.getValue();
+String gender = GenderComboBox.getSelectedItem().toString();
+String weightInput = WeightTextField.getText().trim();
+String color = ColorTextField.getText().trim();
+String healthStatus = HealthStatusComboBox.getSelectedItem().toString();
+String reason = ReasonComboBox.getSelectedItem().toString();
 String description = DescriptionTextArea.getText().trim();
 
-if (petIdInput.isEmpty()) {
-    JOptionPane.showMessageDialog(this, "Please enter Pet ID.");
+if ("Please select species".equals(species)) {
+    JOptionPane.showMessageDialog(this, "Please select species.");
     return;
 }
 
-int petId;
+if ("Please select gender".equals(gender)) {
+    JOptionPane.showMessageDialog(this, "Please select gender.");
+    return;
+}
+
+if ("Please select health status".equals(healthStatus)) {
+    JOptionPane.showMessageDialog(this, "Please select health status.");
+    return;
+}
+
+if ("Please select reason".equals(reason)) {
+    JOptionPane.showMessageDialog(this, "Please select surrender reason.");
+    return;
+}
+if (petName.isEmpty()) {
+    JOptionPane.showMessageDialog(this, "Please enter pet name.");
+    return;
+}
+
+if (breed.isEmpty()) {
+    JOptionPane.showMessageDialog(this, "Please enter breed.");
+    return;
+}
+
+if (weightInput.isEmpty()) {
+    JOptionPane.showMessageDialog(this, "Please enter weight.");
+    return;
+}
+
+if (age < 0) {
+    JOptionPane.showMessageDialog(this, "Please enter a valid age.");
+    return;
+}
+double weight;
 try {
-    petId = Integer.parseInt(petIdInput);
+    weight = Double.parseDouble(weightInput);
 } catch (NumberFormatException e) {
-    JOptionPane.showMessageDialog(this, "Pet ID must be a number.");
+    JOptionPane.showMessageDialog(this, "Weight must be a number (kg).");
     return;
 }
 
-if (reason.isEmpty()) {
-    JOptionPane.showMessageDialog(this, "Please enter surrender reason.");
+if (color.isEmpty()) {
+    JOptionPane.showMessageDialog(this, "Please enter color.");
     return;
 }
 
 boolean success = system.createSurrenderRequest(
         currentUser.getUserId(),
-        petId,
+        petName,
+        species,
+        breed,
+        age,
+        gender,
+        weight,
+        color,
+        healthStatus,
         reason,
         description
 );
@@ -196,11 +325,20 @@ boolean success = system.createSurrenderRequest(
 if (success) {
     JOptionPane.showMessageDialog(this, "Surrender request submitted successfully.");
 
-    PetIdTextField.setText("");
-    ReasonTextField.setText("");
+    PetNameTextField.setText("");
+    BreedTextField.setText("");
+    WeightTextField.setText("");
+    ColorTextField.setText("");
     DescriptionTextArea.setText("");
+
+    AgeSpinner.setValue(0);
+
+    SpeciesComboBox.setSelectedIndex(0);
+    GenderComboBox.setSelectedIndex(0);
+    HealthStatusComboBox.setSelectedIndex(0);
+    ReasonComboBox.setSelectedIndex(0);
 } else {
-    JOptionPane.showMessageDialog(this, "Submission failed. You may already have an active request for this pet.");
+    JOptionPane.showMessageDialog(this, "Submission failed.");
 }
     }//GEN-LAST:event_SubmitSurrenderButtonActionPerformed
 
@@ -229,6 +367,13 @@ for (SurrenderRequest request : requestList) {
     sb.append("Request ID: ").append(request.getSurrenderRequestId()).append("\n")
       .append("Pet ID: ").append(request.getPetId()).append("\n")
       .append("Pet Name: ").append(request.getPetName()).append("\n")
+      .append("Species: ").append(request.getSpecies()).append("\n")
+      .append("Breed: ").append(request.getBreed()).append("\n")
+      .append("Age: ").append(request.getAge()).append("\n")
+      .append("Gender: ").append(request.getGender()).append("\n")
+      .append("Weight (kg): ").append(request.getWeight()).append("\n")
+      .append("Color: ").append(request.getColor()).append("\n")
+      .append("Health Status: ").append(request.getHealthStatus()).append("\n")
       .append("Status: ").append(request.getStatus()).append("\n")
       .append("Reason: ").append(request.getReason()).append("\n")
       .append("Description: ").append(request.getDescription()).append("\n")
@@ -237,7 +382,7 @@ for (SurrenderRequest request : requestList) {
       .append("--------------------------------------\n");
 }
 
-JTextArea textArea = new JTextArea(sb.toString(), 18, 40);
+JTextArea textArea = new JTextArea(sb.toString(), 22, 50);
 textArea.setEditable(false);
 textArea.setLineWrap(true);
 textArea.setWrapStyleWord(true);
@@ -250,9 +395,18 @@ JOptionPane.showMessageDialog(
 );
     }//GEN-LAST:event_ViewMyRequestsButtonActionPerformed
 
-    private void ReasonTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReasonTextFieldActionPerformed
+    private void BreedTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BreedTextFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_ReasonTextFieldActionPerformed
+    }//GEN-LAST:event_BreedTextFieldActionPerformed
+
+    private void ColorTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ColorTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ColorTextFieldActionPerformed
+
+    private void WeightTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_WeightTextFieldActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_WeightTextFieldActionPerformed
 
     /**
      * @param args the command line arguments
@@ -280,16 +434,30 @@ JOptionPane.showMessageDialog(
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel AgeLabel;
+    private javax.swing.JSpinner AgeSpinner;
+    private javax.swing.JLabel BreedLabel;
+    private javax.swing.JTextField BreedTextField;
+    private javax.swing.JLabel ColorLabel;
+    private javax.swing.JTextField ColorTextField;
     private javax.swing.JLabel DescriptionLabel;
-    private javax.swing.JScrollPane DescriptionScrollBar;
+    private javax.swing.JScrollPane DescriptionScrollPane;
     private javax.swing.JTextArea DescriptionTextArea;
+    private javax.swing.JComboBox<String> GenderComboBox;
+    private javax.swing.JLabel GenderLabel;
+    private javax.swing.JLabel HealthLabel;
+    private javax.swing.JComboBox<String> HealthStatusComboBox;
     private javax.swing.JButton LogoutButton;
-    private javax.swing.JLabel PetIdLabel;
-    private javax.swing.JTextField PetIdTextField;
+    private javax.swing.JLabel PetNameLabel;
+    private javax.swing.JTextField PetNameTextField;
+    private javax.swing.JComboBox<String> ReasonComboBox;
     private javax.swing.JLabel ReasonLabel;
-    private javax.swing.JTextField ReasonTextField;
+    private javax.swing.JComboBox<String> SpeciesComboBox;
+    private javax.swing.JLabel SpeciesLabel;
     private javax.swing.JButton SubmitSurrenderButton;
     private javax.swing.JLabel SurrenderLabel;
     private javax.swing.JButton ViewMyRequestsButton;
+    private javax.swing.JLabel WeightLabel;
+    private javax.swing.JTextField WeightTextField;
     // End of variables declaration//GEN-END:variables
 }

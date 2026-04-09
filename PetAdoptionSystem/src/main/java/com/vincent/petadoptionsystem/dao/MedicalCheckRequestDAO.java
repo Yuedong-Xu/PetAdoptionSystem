@@ -140,77 +140,105 @@ public class MedicalCheckRequestDAO {
         return requestList;
     }
 
-    public boolean submitMedicalReport(int requestId, int vetUserId, String reportNotes, String newHealthStatus) {
-        Connection conn = null;
+    public boolean submitMedicalReport(
+        int requestId,
+        int vetUserId,
+        String diagnosis,
+        String vaccinationStatus,
+        String recommendation,
+        String resultStatus,
+        String newHealthStatus
+) {
+    Connection conn = null;
 
-        try {
-            conn = DatabaseManager.getConnection();
-            conn.setAutoCommit(false);
+    try {
+        conn = DatabaseManager.getConnection();
+        conn.setAutoCommit(false);
 
-            int petId = -1;
+        int petId = -1;
 
-            String findPetSql = "SELECT PetId FROM MedicalCheckRequests WHERE MedicalCheckRequestId = ?";
-            try (PreparedStatement findPs = conn.prepareStatement(findPetSql)) {
-                findPs.setInt(1, requestId);
+        String findPetSql = "SELECT PetId FROM MedicalCheckRequests WHERE MedicalCheckRequestId = ?";
+        try (PreparedStatement findPs = conn.prepareStatement(findPetSql)) {
+            findPs.setInt(1, requestId);
 
-                try (ResultSet rs = findPs.executeQuery()) {
-                    if (rs.next()) {
-                        petId = rs.getInt("PetId");
-                    } else {
-                        conn.rollback();
-                        return false;
-                    }
-                }
-            }
-
-            String updateRequestSql = "UPDATE MedicalCheckRequests " +
-                                      "SET HandledByUserId = ?, Status = 'Completed', " +
-                                      "Description = ?, ProcessedAt = NOW() " +
-                                      "WHERE MedicalCheckRequestId = ?";
-
-            try (PreparedStatement requestPs = conn.prepareStatement(updateRequestSql)) {
-                requestPs.setInt(1, vetUserId);
-                requestPs.setString(2, reportNotes);
-                requestPs.setInt(3, requestId);
-
-                int rows = requestPs.executeUpdate();
-                if (rows == 0) {
+            try (ResultSet rs = findPs.executeQuery()) {
+                if (rs.next()) {
+                    petId = rs.getInt("PetId");
+                } else {
                     conn.rollback();
                     return false;
                 }
             }
+        }
 
-            String updatePetSql = "UPDATE Pets SET HealthStatus = ? WHERE PetId = ?";
-            try (PreparedStatement petPs = conn.prepareStatement(updatePetSql)) {
-                petPs.setString(1, newHealthStatus);
-                petPs.setInt(2, petId);
-                petPs.executeUpdate();
-            }
+        String updateRequestSql = "UPDATE MedicalCheckRequests " +
+                                  "SET HandledByUserId = ?, Status = 'Completed', " +
+                                  "Description = ?, ProcessedAt = NOW() " +
+                                  "WHERE MedicalCheckRequestId = ?";
 
-            conn.commit();
-            return true;
+        try (PreparedStatement requestPs = conn.prepareStatement(updateRequestSql)) {
+            requestPs.setInt(1, vetUserId);
+            requestPs.setString(2, diagnosis);
+            requestPs.setInt(3, requestId);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            if (conn != null) {
-                try {
-                    conn.rollback();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        } finally {
-            if (conn != null) {
-                try {
-                    conn.setAutoCommit(true);
-                    conn.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            int rows = requestPs.executeUpdate();
+            if (rows == 0) {
+                conn.rollback();
+                return false;
             }
         }
 
-        return false;
+        String insertReportSql = "INSERT INTO MedicalReports " +
+                                 "(PetId, MedicalCheckRequestId, VetStaffUserId, ExamDate, Diagnosis, VaccinationStatus, Recommendation, ResultStatus, CreatedAt) " +
+                                 "VALUES (?, ?, ?, CURDATE(), ?, ?, ?, ?, NOW())";
+
+        try (PreparedStatement reportPs = conn.prepareStatement(insertReportSql)) {
+            reportPs.setInt(1, petId);
+            reportPs.setInt(2, requestId);
+            reportPs.setInt(3, vetUserId);
+            reportPs.setString(4, diagnosis);
+            reportPs.setString(5, vaccinationStatus);
+            reportPs.setString(6, recommendation);
+            reportPs.setString(7, resultStatus);
+
+            int rows = reportPs.executeUpdate();
+            if (rows == 0) {
+                conn.rollback();
+                return false;
+            }
+        }
+
+        String updatePetSql = "UPDATE Pets SET HealthStatus = ?, HealthCheckStatus = 'Completed' WHERE PetId = ?";
+        try (PreparedStatement petPs = conn.prepareStatement(updatePetSql)) {
+            petPs.setString(1, newHealthStatus);
+            petPs.setInt(2, petId);
+            petPs.executeUpdate();
+        }
+
+        conn.commit();
+        return true;
+
+    } catch (Exception e) {
+        e.printStackTrace();
+
+        if (conn != null) {
+            try {
+                conn.rollback();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    } finally {
+        if (conn != null) {
+            try {
+                conn.setAutoCommit(true);
+                conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
+
+    return false;
+}
 }

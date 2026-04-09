@@ -24,11 +24,11 @@ import java.util.List;
 public class PetAdoptionSystem {
 
     private static PetAdoptionSystem instance;
-    private AdoptionApplicationDAO adoptionApplicationDAO;
-    private UserDAO userDAO;
-    private PetDAO petDAO;
-    private MedicalCheckRequestDAO medicalCheckRequestDAO;
-    private SurrenderRequestDAO surrenderRequestDAO;
+    private final AdoptionApplicationDAO adoptionApplicationDAO;
+    private final UserDAO userDAO;
+    private final PetDAO petDAO;
+    private final MedicalCheckRequestDAO medicalCheckRequestDAO;
+    private final SurrenderRequestDAO surrenderRequestDAO;
 
     private PetAdoptionSystem() {
         userDAO = new UserDAO();
@@ -81,13 +81,53 @@ public class PetAdoptionSystem {
         return medicalCheckRequestDAO.getAllMedicalCheckRequests();
     }
 
-    public boolean submitMedicalReport(int requestId, int vetUserId, String reportNotes, String newHealthStatus) {
-        return medicalCheckRequestDAO.submitMedicalReport(requestId, vetUserId, reportNotes, newHealthStatus);
-    }
+    public boolean submitMedicalReport(
+        int requestId,
+        int vetUserId,
+        String diagnosis,
+        String vaccinationStatus,
+        String recommendation,
+        String resultStatus,
+        String newHealthStatus
+) {
+    return medicalCheckRequestDAO.submitMedicalReport(
+            requestId,
+            vetUserId,
+            diagnosis,
+            vaccinationStatus,
+            recommendation,
+            resultStatus,
+            newHealthStatus
+    );
+}
 
-    public boolean createSurrenderRequest(int userId, int petId, String reason, String description) {
-        return surrenderRequestDAO.createSurrenderRequest(userId, petId, reason, description);
-    }
+    public boolean createSurrenderRequest(
+        int userId,
+        String petName,
+        String species,
+        String breed,
+        int age,
+        String gender,
+        double weight,
+        String color,
+        String healthStatus,
+        String reason,
+        String description
+) {
+    return surrenderRequestDAO.createSurrenderRequest(
+            userId,
+            petName,
+            species,
+            breed,
+            age,
+            gender,
+            weight,
+            color,
+            healthStatus,
+            reason,
+            description
+    );
+}
 
     public List<SurrenderRequest> getSurrenderRequestsByUserId(int userId) {
         return surrenderRequestDAO.getRequestsByUserId(userId);

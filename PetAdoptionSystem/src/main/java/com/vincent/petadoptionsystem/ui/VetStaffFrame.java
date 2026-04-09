@@ -176,14 +176,58 @@ public VetStaffFrame() {
     if (newHealthStatus == null || newHealthStatus.trim().isEmpty()) {
         JOptionPane.showMessageDialog(this, "Please select a health status.");
         return;
-    }
+    }String diagnosis = JOptionPane.showInputDialog(this, "Enter diagnosis:");
+if (diagnosis == null || diagnosis.trim().isEmpty()) {
+    JOptionPane.showMessageDialog(this, "Diagnosis cannot be empty.");
+    return;
+}
+
+Object[] vaccinationOptions = {"Up to Date", "Partially Vaccinated", "Not Vaccinated", "Unknown"};
+String vaccinationStatus = (String) JOptionPane.showInputDialog(
+        this,
+        "Select vaccination status:",
+        "Vaccination Status",
+        JOptionPane.PLAIN_MESSAGE,
+        null,
+        vaccinationOptions,
+        vaccinationOptions[0]
+);
+
+if (vaccinationStatus == null || vaccinationStatus.trim().isEmpty()) {
+    JOptionPane.showMessageDialog(this, "Please select vaccination status.");
+    return;
+}
+
+String recommendation = JOptionPane.showInputDialog(this, "Enter recommendation:");
+if (recommendation == null) {
+    recommendation = "";
+}
+
+Object[] resultOptions = {"Cleared", "Needs Treatment", "Further Observation Required"};
+String resultStatus = (String) JOptionPane.showInputDialog(
+        this,
+        "Select report result:",
+        "Result Status",
+        JOptionPane.PLAIN_MESSAGE,
+        null,
+        resultOptions,
+        resultOptions[0]
+);
+
+if (resultStatus == null || resultStatus.trim().isEmpty()) {
+    JOptionPane.showMessageDialog(this, "Please select result status.");
+    return;
+}
 
     boolean success = system.submitMedicalReport(
-            requestId,
-            currentUser.getUserId(),
-            reportNotes,
-            newHealthStatus
-    );
+        requestId,
+        currentUser.getUserId(),
+        diagnosis,
+        vaccinationStatus,
+        recommendation,
+        resultStatus,
+        newHealthStatus
+);
 
     if (success) {
         JOptionPane.showMessageDialog(this, "Medical report submitted successfully.");

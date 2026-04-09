@@ -10,6 +10,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import com.vincent.petadoptionsystem.model.SurrenderRequest;
+
 /**
  *
  * @author Yuedong Xu
@@ -173,38 +174,37 @@ private void setupSurrenderTable() {
     ApplicationTable.setModel(new DefaultTableModel(
         new Object[][]{},
         new String[]{
-            "Request ID", "User ID", "Owner Name",
-            "Pet ID", "Pet Name", "Request Date",
-            "Status", "Reason", "Description", "Handled By", "Processed At"
+           "Request ID", "User ID", "Owner Name",
+"Pet ID", "Pet Name", "Species", "Breed", "Age", "Gender",
+"Weight(kg)", "Color", "Health Status",
+"Request Date", "Status", "Reason", "Description", "Handled By", "Processed At"
         }
     ));
     viewingSurrenderRequests = true;
 }
-private void loadAllSurrenderRequests() {
-    List<SurrenderRequest> requestList = system.getAllSurrenderRequests();
-    setupSurrenderTable();
+private void loadAllApplications() {
+    setupApplicationTable();
+
+    List<AdoptionApplication> applicationList = system.getAllAdoptionApplications();
 
     DefaultTableModel model = (DefaultTableModel) ApplicationTable.getModel();
     model.setRowCount(0);
 
-    for (SurrenderRequest request : requestList) {
+    for (AdoptionApplication application : applicationList) {
         model.addRow(new Object[]{
-            request.getSurrenderRequestId(),
-            request.getUserId(),
-            request.getOwnerName(),
-            request.getPetId(),
-            request.getPetName(),
-            request.getRequestDate(),
-            request.getStatus(),
-            request.getReason(),
-            request.getDescription(),
-            request.getHandledByUserId(),
-            request.getProcessedAt()
+            application.getApplicationId(),
+            application.getUserId(),
+            application.getAdopterName(),
+            application.getPetId(),
+            application.getPetName(),
+            application.getSpecies(),
+            application.getBreed(),
+            application.getStatus()
         });
     }
 
-    if (requestList.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "No surrender requests found.");
+    if (applicationList.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "No adoption applications found.");
     }
 }
 private void updateSelectedSurrenderRequest(String newStatus) {
@@ -223,7 +223,7 @@ private void updateSelectedSurrenderRequest(String newStatus) {
     DefaultTableModel model = (DefaultTableModel) ApplicationTable.getModel();
 
     int requestId = Integer.parseInt(model.getValueAt(selectedRow, 0).toString());
-    String currentStatus = model.getValueAt(selectedRow, 6).toString();
+    String currentStatus = model.getValueAt(selectedRow, 13).toString();
 
     if (!"Submitted".equalsIgnoreCase(currentStatus)) {
         JOptionPane.showMessageDialog(this, "Only surrender requests with status Submitted can be updated.");
@@ -330,27 +330,39 @@ if (viewingSurrenderRequests) {
         new MainFrame().setVisible(true);
 this.dispose();
     }//GEN-LAST:event_LogoutButtonActionPerformed
-private void loadAllApplications() {
-    List<AdoptionApplication> applicationList = system.getAllAdoptionApplications();
+private void loadAllSurrenderRequests() {
+    setupSurrenderTable();
+
+    List<SurrenderRequest> requestList = system.getAllSurrenderRequests();
 
     DefaultTableModel model = (DefaultTableModel) ApplicationTable.getModel();
     model.setRowCount(0);
 
-    for (AdoptionApplication application : applicationList) {
+    for (SurrenderRequest request : requestList) {
         model.addRow(new Object[]{
-            application.getApplicationId(),
-            application.getUserId(),
-            application.getAdopterName(),
-            application.getPetId(),
-            application.getPetName(),
-            application.getSpecies(),
-            application.getBreed(),
-            application.getStatus()
+            request.getSurrenderRequestId(),
+            request.getUserId(),
+            request.getOwnerName(),
+            request.getPetId(),
+            request.getPetName(),
+            request.getSpecies(),
+            request.getBreed(),
+            request.getAge(),
+            request.getGender(),
+            request.getWeight(),
+            request.getColor(),
+            request.getHealthStatus(),
+            request.getRequestDate(),
+            request.getStatus(),
+            request.getReason(),
+            request.getDescription(),
+            request.getHandledByUserId(),
+            request.getProcessedAt()
         });
     }
 
-    if (applicationList.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "No adoption applications found.");
+    if (requestList.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "No surrender requests found.");
     }
 }
 private void updateSelectedApplication(String newStatus) {
