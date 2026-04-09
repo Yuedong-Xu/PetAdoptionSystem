@@ -14,6 +14,12 @@ import com.vincent.petadoptionsystem.service.PetAdoptionSystem;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import java.awt.GridLayout;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 public class VetStaffFrame extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VetStaffFrame.class.getName());
@@ -94,8 +100,8 @@ public VetStaffFrame() {
                             .addComponent(ViewMedicalButton)
                             .addComponent(SubmitMedicalButton)
                             .addComponent(LogoutButton))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
-                        .addComponent(MedicalScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 482, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(MedicalScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 1178, Short.MAX_VALUE)))
                 .addGap(37, 37, 37))
         );
         layout.setVerticalGroup(
@@ -134,6 +140,7 @@ public VetStaffFrame() {
 
     private void SubmitMedicalButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubmitMedicalButtonActionPerformed
         // TODO add your handling code here:
+    
     int selectedRow = MedicalTable.getSelectedRow();
 
     if (selectedRow == -1) {
@@ -152,82 +159,78 @@ public VetStaffFrame() {
     String currentStatus = model.getValueAt(selectedRow, 6).toString();
 
     if (!"Submitted".equalsIgnoreCase(currentStatus) && !"In Progress".equalsIgnoreCase(currentStatus)) {
-    JOptionPane.showMessageDialog(this, "Only Submitted or In Progress requests can be completed.");
-    return;
-}
-
-    String reportNotes = JOptionPane.showInputDialog(this, "Enter medical report notes:");
-    if (reportNotes == null || reportNotes.trim().isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Medical report notes cannot be empty.");
+        JOptionPane.showMessageDialog(this, "Only Submitted or In Progress requests can be completed.");
         return;
     }
 
-    Object[] options = {"Healthy", "Needs Treatment", "Under Observation"};
-    String newHealthStatus = (String) JOptionPane.showInputDialog(
-            this,
-            "Select new health status:",
-            "Health Status",
-            JOptionPane.PLAIN_MESSAGE,
-            null,
-            options,
-            options[0]
+    JTextArea diagnosisArea = new JTextArea(3, 20);
+    diagnosisArea.setLineWrap(true);
+    diagnosisArea.setWrapStyleWord(true);
+
+    JComboBox<String> vaccinationCombo = new JComboBox<>(
+            new String[]{"Up to Date", "Partially Vaccinated", "Not Vaccinated", "Unknown"}
     );
 
-    if (newHealthStatus == null || newHealthStatus.trim().isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Please select a health status.");
+    JTextArea recommendationArea = new JTextArea(3, 20);
+    recommendationArea.setLineWrap(true);
+    recommendationArea.setWrapStyleWord(true);
+
+    JComboBox<String> resultCombo = new JComboBox<>(
+            new String[]{"Cleared", "Needs Treatment", "Further Observation Required"}
+    );
+
+    JComboBox<String> healthStatusCombo = new JComboBox<>(
+            new String[]{"Healthy", "Needs Treatment", "Under Observation"}
+    );
+
+    JPanel panel = new JPanel(new GridLayout(0, 2, 8, 8));
+    panel.add(new JLabel("Diagnosis:"));
+    panel.add(new JScrollPane(diagnosisArea));
+
+    panel.add(new JLabel("Vaccination Status:"));
+    panel.add(vaccinationCombo);
+
+    panel.add(new JLabel("Recommendation:"));
+    panel.add(new JScrollPane(recommendationArea));
+
+    panel.add(new JLabel("Report Result:"));
+    panel.add(resultCombo);
+
+    panel.add(new JLabel("New Health Status:"));
+    panel.add(healthStatusCombo);
+
+    int result = JOptionPane.showConfirmDialog(
+            this,
+            panel,
+            "Submit Medical Report",
+            JOptionPane.OK_CANCEL_OPTION,
+            JOptionPane.PLAIN_MESSAGE
+    );
+
+    if (result != JOptionPane.OK_OPTION) {
         return;
-    }String diagnosis = JOptionPane.showInputDialog(this, "Enter diagnosis:");
-if (diagnosis == null || diagnosis.trim().isEmpty()) {
-    JOptionPane.showMessageDialog(this, "Diagnosis cannot be empty.");
-    return;
-}
+    }
 
-Object[] vaccinationOptions = {"Up to Date", "Partially Vaccinated", "Not Vaccinated", "Unknown"};
-String vaccinationStatus = (String) JOptionPane.showInputDialog(
-        this,
-        "Select vaccination status:",
-        "Vaccination Status",
-        JOptionPane.PLAIN_MESSAGE,
-        null,
-        vaccinationOptions,
-        vaccinationOptions[0]
-);
+    String diagnosis = diagnosisArea.getText().trim();
+    String vaccinationStatus = vaccinationCombo.getSelectedItem().toString();
+    String recommendation = recommendationArea.getText().trim();
+    String resultStatus = resultCombo.getSelectedItem().toString();
+    String newHealthStatus = healthStatusCombo.getSelectedItem().toString();
 
-if (vaccinationStatus == null || vaccinationStatus.trim().isEmpty()) {
-    JOptionPane.showMessageDialog(this, "Please select vaccination status.");
-    return;
-}
-
-String recommendation = JOptionPane.showInputDialog(this, "Enter recommendation:");
-if (recommendation == null) {
-    recommendation = "";
-}
-
-Object[] resultOptions = {"Cleared", "Needs Treatment", "Further Observation Required"};
-String resultStatus = (String) JOptionPane.showInputDialog(
-        this,
-        "Select report result:",
-        "Result Status",
-        JOptionPane.PLAIN_MESSAGE,
-        null,
-        resultOptions,
-        resultOptions[0]
-);
-
-if (resultStatus == null || resultStatus.trim().isEmpty()) {
-    JOptionPane.showMessageDialog(this, "Please select result status.");
-    return;
-}
+    if (diagnosis.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Diagnosis cannot be empty.");
+        return;
+    }
 
     boolean success = system.submitMedicalReport(
-        requestId,
-        currentUser.getUserId(),
-        diagnosis,
-        vaccinationStatus,
-        recommendation,
-        resultStatus,
-        newHealthStatus
-);
+            requestId,
+            currentUser.getUserId(),
+            diagnosis,
+            vaccinationStatus,
+            recommendation,
+            resultStatus,
+            newHealthStatus
+    );
 
     if (success) {
         JOptionPane.showMessageDialog(this, "Medical report submitted successfully.");
@@ -235,6 +238,7 @@ if (resultStatus == null || resultStatus.trim().isEmpty()) {
     } else {
         JOptionPane.showMessageDialog(this, "Failed to submit medical report.");
     }
+
     }//GEN-LAST:event_SubmitMedicalButtonActionPerformed
 private void setupMedicalTable() {
     MedicalTable.setModel(new DefaultTableModel(
@@ -247,29 +251,35 @@ private void setupMedicalTable() {
     ));
 }
 private void loadMedicalRequests() {
-    List<MedicalCheckRequest> requestList = system.getAllMedicalCheckRequests();
+    if (currentUser == null || currentUser.getOrganizationId() == null) {
+        JOptionPane.showMessageDialog(this, "Current vet organization is missing.");
+        return;
+    }
+
+    List<MedicalCheckRequest> requestList =
+            system.getMedicalCheckRequestsByClinicId(currentUser.getOrganizationId());
 
     DefaultTableModel model = (DefaultTableModel) MedicalTable.getModel();
     model.setRowCount(0);
 
     for (MedicalCheckRequest request : requestList) {
         model.addRow(new Object[]{
-    request.getMedicalCheckRequestId(),
-    request.getPetId(),
-    request.getPetName(),
-    request.getShelterId(),
-    request.getClinicId(),
-    request.getRequestDate(),
-    request.getStatus(),
-    request.getDescription(),
-    request.getCreatedByUserId(),
-    request.getHandledByUserId(),
-    request.getProcessedAt()
-});
+            request.getMedicalCheckRequestId(),
+            request.getPetId(),
+            request.getPetName(),
+            request.getShelterId(),
+            request.getClinicId(),
+            request.getRequestDate(),
+            request.getStatus(),
+            request.getDescription(),
+            request.getCreatedByUserId(),
+            request.getHandledByUserId(),
+            request.getProcessedAt()
+        });
     }
 
     if (requestList.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "No medical check requests found.");
+        JOptionPane.showMessageDialog(this, "No medical check requests found for your clinic.");
     }
 }
     /**

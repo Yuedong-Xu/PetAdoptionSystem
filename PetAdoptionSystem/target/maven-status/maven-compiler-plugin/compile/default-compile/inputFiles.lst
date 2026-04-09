@@ -1,13 +1,12 @@
 /Users/vincent/NetBeansProjects/PetAdoptionSystem/src/main/java/com/vincent/petadoptionsystem/App.java
-/Users/vincent/NetBeansProjects/PetAdoptionSystem/src/main/java/com/vincent/petadoptionsystem/LoginTest.java
-/Users/vincent/NetBeansProjects/PetAdoptionSystem/src/main/java/com/vincent/petadoptionsystem/PetAdoptionSystem.java
+/Users/vincent/NetBeansProjects/PetAdoptionSystem/src/main/java/com/vincent/petadoptionsystem/dao/AdopterProfileDAO.java
 /Users/vincent/NetBeansProjects/PetAdoptionSystem/src/main/java/com/vincent/petadoptionsystem/dao/AdoptionApplicationDAO.java
 /Users/vincent/NetBeansProjects/PetAdoptionSystem/src/main/java/com/vincent/petadoptionsystem/dao/MedicalCheckRequestDAO.java
 /Users/vincent/NetBeansProjects/PetAdoptionSystem/src/main/java/com/vincent/petadoptionsystem/dao/PetDAO.java
 /Users/vincent/NetBeansProjects/PetAdoptionSystem/src/main/java/com/vincent/petadoptionsystem/dao/SurrenderRequestDAO.java
 /Users/vincent/NetBeansProjects/PetAdoptionSystem/src/main/java/com/vincent/petadoptionsystem/dao/UserDAO.java
 /Users/vincent/NetBeansProjects/PetAdoptionSystem/src/main/java/com/vincent/petadoptionsystem/db/DatabaseManager.java
-/Users/vincent/NetBeansProjects/PetAdoptionSystem/src/main/java/com/vincent/petadoptionsystem/db/TestConnection.java
+/Users/vincent/NetBeansProjects/PetAdoptionSystem/src/main/java/com/vincent/petadoptionsystem/model/AdopterProfile.java
 /Users/vincent/NetBeansProjects/PetAdoptionSystem/src/main/java/com/vincent/petadoptionsystem/model/AdoptionApplication.java
 /Users/vincent/NetBeansProjects/PetAdoptionSystem/src/main/java/com/vincent/petadoptionsystem/model/MedicalCheckRequest.java
 /Users/vincent/NetBeansProjects/PetAdoptionSystem/src/main/java/com/vincent/petadoptionsystem/model/Pet.java

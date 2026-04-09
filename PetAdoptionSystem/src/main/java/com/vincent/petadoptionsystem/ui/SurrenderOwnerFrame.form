@@ -26,11 +26,13 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace min="-2" pref="75" max="-2" attributes="0"/>
               <Component id="SubmitSurrenderButton" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="125" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
+              <Component id="WithdrawRequestButton" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="67" max="32767" attributes="0"/>
               <Component id="ViewMyRequestsButton" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="149" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
               <Component id="LogoutButton" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="121" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="64" max="-2" attributes="0"/>
           </Group>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="211" max="-2" attributes="0"/>
@@ -155,6 +157,7 @@
                   <Component id="SubmitSurrenderButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="ViewMyRequestsButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="LogoutButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="WithdrawRequestButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="87" max="-2" attributes="0"/>
           </Group>
@@ -341,6 +344,14 @@
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>
+    </Component>
+    <Component class="javax.swing.JButton" name="WithdrawRequestButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Withdraw Surrender Request"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="WithdrawRequestButtonActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

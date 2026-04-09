@@ -10,16 +10,9 @@ package com.vincent.petadoptionsystem.model;
  */
 
 
-public class AdoptionApplication {
-    private int applicationId;
+public class AdopterProfile {
+    private int adopterProfileId;
     private int userId;
-    private String adopterName;
-    private int petId;
-    private String petName;
-    private String species;
-    private String breed;
-    private String status;
-
     private Double monthlyIncome;
     private String livingArea;
     private int numberOfPets;
@@ -27,15 +20,15 @@ public class AdoptionApplication {
     private Integer numberOfPeople;
     private String preferredPetType;
 
-    public AdoptionApplication() {
+    public AdopterProfile() {
     }
 
-    public int getApplicationId() {
-        return applicationId;
+    public int getAdopterProfileId() {
+        return adopterProfileId;
     }
 
-    public void setApplicationId(int applicationId) {
-        this.applicationId = applicationId;
+    public void setAdopterProfileId(int adopterProfileId) {
+        this.adopterProfileId = adopterProfileId;
     }
 
     public int getUserId() {
@@ -44,54 +37,6 @@ public class AdoptionApplication {
 
     public void setUserId(int userId) {
         this.userId = userId;
-    }
-
-    public String getAdopterName() {
-        return adopterName;
-    }
-
-    public void setAdopterName(String adopterName) {
-        this.adopterName = adopterName;
-    }
-
-    public int getPetId() {
-        return petId;
-    }
-
-    public void setPetId(int petId) {
-        this.petId = petId;
-    }
-
-    public String getPetName() {
-        return petName;
-    }
-
-    public void setPetName(String petName) {
-        this.petName = petName;
-    }
-
-    public String getSpecies() {
-        return species;
-    }
-
-    public void setSpecies(String species) {
-        this.species = species;
-    }
-
-    public String getBreed() {
-        return breed;
-    }
-
-    public void setBreed(String breed) {
-        this.breed = breed;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public Double getMonthlyIncome() {

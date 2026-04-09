@@ -54,77 +54,64 @@ public class AdoptionApplicationDAO {
     return false;
 }
 
-    public List<AdoptionApplication> getApplicationsByUserId(int userId) {
-        List<AdoptionApplication> applicationList = new ArrayList<>();
-
-        String sql = "SELECT aa.ApplicationId, aa.UserId, aa.PetId, " +
-                     "p.Name AS PetName, p.Species, p.Breed, aa.Status " +
-                     "FROM AdoptionApplications aa " +
-                     "JOIN Pets p ON aa.PetId = p.PetId " +
-                     "WHERE aa.UserId = ? " +
-                     "ORDER BY aa.ApplicationId DESC";
-
-        try (Connection conn = DatabaseManager.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setInt(1, userId);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    AdoptionApplication application = new AdoptionApplication();
-                    application.setApplicationId(rs.getInt("ApplicationId"));
-                    application.setUserId(rs.getInt("UserId"));
-                    application.setPetId(rs.getInt("PetId"));
-                    application.setPetName(rs.getString("PetName"));
-                    application.setSpecies(rs.getString("Species"));
-                    application.setBreed(rs.getString("Breed"));
-                    application.setStatus(rs.getString("Status"));
-
-                    applicationList.add(application);
-                }
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return applicationList;
-    }
-
     public List<AdoptionApplication> getAllApplications() {
-        List<AdoptionApplication> applicationList = new ArrayList<>();
+    List<AdoptionApplication> applicationList = new ArrayList<>();
 
-        String sql = "SELECT aa.ApplicationId, aa.UserId, u.Name AS AdopterName, " +
-                     "aa.PetId, p.Name AS PetName, p.Species, p.Breed, aa.Status " +
-                     "FROM AdoptionApplications aa " +
-                     "JOIN Users u ON aa.UserId = u.UserId " +
-                     "JOIN Pets p ON aa.PetId = p.PetId " +
-                     "ORDER BY aa.ApplicationId DESC";
+    String sql = "SELECT aa.ApplicationId, aa.UserId, u.Name AS AdopterName, " +
+                 "aa.PetId, p.Name AS PetName, p.Species, p.Breed, aa.Status, " +
+                 "ap.MonthlyIncome, ap.LivingArea, ap.NumberOfPets, " +
+                 "ap.PetRaisingExperience, ap.NumberOfPeople, ap.PreferredPetType " +
+                 "FROM AdoptionApplications aa " +
+                 "JOIN Users u ON aa.UserId = u.UserId " +
+                 "JOIN Pets p ON aa.PetId = p.PetId " +
+                 "LEFT JOIN AdopterProfiles ap ON aa.UserId = ap.UserId " +
+                 "ORDER BY aa.ApplicationId DESC";
 
-        try (Connection conn = DatabaseManager.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+    try (Connection conn = DatabaseManager.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
 
-            while (rs.next()) {
-                AdoptionApplication application = new AdoptionApplication();
-                application.setApplicationId(rs.getInt("ApplicationId"));
-                application.setUserId(rs.getInt("UserId"));
-                application.setAdopterName(rs.getString("AdopterName"));
-                application.setPetId(rs.getInt("PetId"));
-                application.setPetName(rs.getString("PetName"));
-                application.setSpecies(rs.getString("Species"));
-                application.setBreed(rs.getString("Breed"));
-                application.setStatus(rs.getString("Status"));
+        while (rs.next()) {
+            AdoptionApplication application = new AdoptionApplication();
+            application.setApplicationId(rs.getInt("ApplicationId"));
+            application.setUserId(rs.getInt("UserId"));
+            application.setAdopterName(rs.getString("AdopterName"));
+            application.setPetId(rs.getInt("PetId"));
+            application.setPetName(rs.getString("PetName"));
+            application.setSpecies(rs.getString("Species"));
+            application.setBreed(rs.getString("Breed"));
+            application.setStatus(rs.getString("Status"));
 
-                applicationList.add(application);
+            double income = rs.getDouble("MonthlyIncome");
+            if (rs.wasNull()) {
+                application.setMonthlyIncome(null);
+            } else {
+                application.setMonthlyIncome(income);
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            application.setLivingArea(rs.getString("LivingArea"));
+            application.setNumberOfPets(rs.getInt("NumberOfPets"));
+            application.setPetRaisingExperience(rs.getString("PetRaisingExperience"));
+
+            int people = rs.getInt("NumberOfPeople");
+            if (rs.wasNull()) {
+                application.setNumberOfPeople(null);
+            } else {
+                application.setNumberOfPeople(people);
+            }
+
+            application.setPreferredPetType(rs.getString("PreferredPetType"));
+
+            applicationList.add(application);
         }
 
-        return applicationList;
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+
+    return applicationList;
+}
+    
 public boolean reviewApplication(int applicationId, String status, int handledByUserId) {
     Connection conn = null;
 
@@ -206,6 +193,25 @@ public boolean reviewApplication(int applicationId, String status, int handledBy
 
     return false;
 }
+public boolean withdrawApplication(int applicationId, int userId) {
+    String sql = "DELETE FROM AdoptionApplications " +
+                 "WHERE ApplicationId = ? AND UserId = ? AND Status = 'Submitted'";
+
+    try (Connection conn = DatabaseManager.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setInt(1, applicationId);
+        ps.setInt(2, userId);
+
+        int rows = ps.executeUpdate();
+        return rows > 0;
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return false;
+}
     public boolean updateApplicationStatus(int applicationId, String status, int handledByUserId) {
         String sql = "UPDATE AdoptionApplications " +
                      "SET Status = ?, HandledByUserId = ? " +
@@ -227,4 +233,101 @@ public boolean reviewApplication(int applicationId, String status, int handledBy
 
         return false;
     }
+    public List<AdoptionApplication> getApplicationsByShelterId(int shelterId) {
+    List<AdoptionApplication> applicationList = new ArrayList<>();
+
+    String sql = "SELECT aa.ApplicationId, aa.UserId, u.Name AS AdopterName, " +
+                 "aa.PetId, p.Name AS PetName, p.Species, p.Breed, aa.Status, " +
+                 "ap.MonthlyIncome, ap.LivingArea, ap.NumberOfPets, " +
+                 "ap.PetRaisingExperience, ap.NumberOfPeople, ap.PreferredPetType " +
+                 "FROM AdoptionApplications aa " +
+                 "JOIN Users u ON aa.UserId = u.UserId " +
+                 "JOIN Pets p ON aa.PetId = p.PetId " +
+                 "LEFT JOIN AdopterProfiles ap ON aa.UserId = ap.UserId " +
+                 "WHERE p.ShelterId = ? " +
+                 "ORDER BY aa.ApplicationId DESC";
+
+    try (Connection conn = DatabaseManager.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setInt(1, shelterId);
+
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                AdoptionApplication application = new AdoptionApplication();
+                application.setApplicationId(rs.getInt("ApplicationId"));
+                application.setUserId(rs.getInt("UserId"));
+                application.setAdopterName(rs.getString("AdopterName"));
+                application.setPetId(rs.getInt("PetId"));
+                application.setPetName(rs.getString("PetName"));
+                application.setSpecies(rs.getString("Species"));
+                application.setBreed(rs.getString("Breed"));
+                application.setStatus(rs.getString("Status"));
+
+                double income = rs.getDouble("MonthlyIncome");
+                if (rs.wasNull()) {
+                    application.setMonthlyIncome(null);
+                } else {
+                    application.setMonthlyIncome(income);
+                }
+
+                application.setLivingArea(rs.getString("LivingArea"));
+                application.setNumberOfPets(rs.getInt("NumberOfPets"));
+                application.setPetRaisingExperience(rs.getString("PetRaisingExperience"));
+
+                int people = rs.getInt("NumberOfPeople");
+                if (rs.wasNull()) {
+                    application.setNumberOfPeople(null);
+                } else {
+                    application.setNumberOfPeople(people);
+                }
+
+                application.setPreferredPetType(rs.getString("PreferredPetType"));
+
+                applicationList.add(application);
+            }
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return applicationList;
+}
+    public List<AdoptionApplication> getApplicationsByUserId(int userId) {
+    List<AdoptionApplication> applicationList = new ArrayList<>();
+
+    String sql = "SELECT aa.ApplicationId, aa.UserId, aa.PetId, " +
+                 "p.Name AS PetName, p.Species, p.Breed, aa.Status " +
+                 "FROM AdoptionApplications aa " +
+                 "JOIN Pets p ON aa.PetId = p.PetId " +
+                 "WHERE aa.UserId = ? " +
+                 "ORDER BY aa.ApplicationId DESC";
+
+    try (Connection conn = DatabaseManager.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setInt(1, userId);
+
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                AdoptionApplication application = new AdoptionApplication();
+                application.setApplicationId(rs.getInt("ApplicationId"));
+                application.setUserId(rs.getInt("UserId"));
+                application.setPetId(rs.getInt("PetId"));
+                application.setPetName(rs.getString("PetName"));
+                application.setSpecies(rs.getString("Species"));
+                application.setBreed(rs.getString("Breed"));
+                application.setStatus(rs.getString("Status"));
+
+                applicationList.add(application);
+            }
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return applicationList;
+}
 }

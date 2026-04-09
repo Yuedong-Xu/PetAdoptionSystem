@@ -14,7 +14,8 @@ import com.vincent.petadoptionsystem.service.PetAdoptionSystem;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 public class SurrenderOwnerFrame extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(SurrenderOwnerFrame.class.getName());
@@ -72,6 +73,7 @@ public SurrenderOwnerFrame() {
         HealthStatusComboBox = new javax.swing.JComboBox<>();
         AgeSpinner = new javax.swing.JSpinner();
         ReasonComboBox = new javax.swing.JComboBox<>();
+        WithdrawRequestButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -124,6 +126,9 @@ public SurrenderOwnerFrame() {
 
         ReasonComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Please select reason", "Moving", "Financial Difficulty", "Allergy", "Behavioral Issues", "Cannot Care Anymore", "Other" }));
 
+        WithdrawRequestButton.setText("Withdraw Surrender Request");
+        WithdrawRequestButton.addActionListener(this::WithdrawRequestButtonActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -131,11 +136,13 @@ public SurrenderOwnerFrame() {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(75, 75, 75)
                 .addComponent(SubmitSurrenderButton)
-                .addGap(125, 125, 125)
+                .addGap(43, 43, 43)
+                .addComponent(WithdrawRequestButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
                 .addComponent(ViewMyRequestsButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 149, Short.MAX_VALUE)
+                .addGap(60, 60, 60)
                 .addComponent(LogoutButton)
-                .addGap(121, 121, 121))
+                .addGap(64, 64, 64))
             .addGroup(layout.createSequentialGroup()
                 .addGap(211, 211, 211)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -232,7 +239,8 @@ public SurrenderOwnerFrame() {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(SubmitSurrenderButton)
                     .addComponent(ViewMyRequestsButton)
-                    .addComponent(LogoutButton))
+                    .addComponent(LogoutButton)
+                    .addComponent(WithdrawRequestButton))
                 .addGap(87, 87, 87))
         );
 
@@ -350,49 +358,64 @@ this.dispose();
 
     private void ViewMyRequestsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ViewMyRequestsButtonActionPerformed
         // TODO add your handling code here:
-        if (currentUser == null) {
-    JOptionPane.showMessageDialog(this, "Current user is missing.");
-    return;
-}
+        
+    if (currentUser == null) {
+        JOptionPane.showMessageDialog(this, "Current user is missing.");
+        return;
+    }
 
-List<SurrenderRequest> requestList = system.getSurrenderRequestsByUserId(currentUser.getUserId());
+    List<SurrenderRequest> requestList = system.getSurrenderRequestsByUserId(currentUser.getUserId());
 
-if (requestList.isEmpty()) {
-    JOptionPane.showMessageDialog(this, "You have not submitted any surrender requests yet.");
-    return;
-}
+    if (requestList.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "You have not submitted any surrender requests yet.");
+        return;
+    }
 
-StringBuilder sb = new StringBuilder();
-for (SurrenderRequest request : requestList) {
-    sb.append("Request ID: ").append(request.getSurrenderRequestId()).append("\n")
-      .append("Pet ID: ").append(request.getPetId()).append("\n")
-      .append("Pet Name: ").append(request.getPetName()).append("\n")
-      .append("Species: ").append(request.getSpecies()).append("\n")
-      .append("Breed: ").append(request.getBreed()).append("\n")
-      .append("Age: ").append(request.getAge()).append("\n")
-      .append("Gender: ").append(request.getGender()).append("\n")
-      .append("Weight (kg): ").append(request.getWeight()).append("\n")
-      .append("Color: ").append(request.getColor()).append("\n")
-      .append("Health Status: ").append(request.getHealthStatus()).append("\n")
-      .append("Status: ").append(request.getStatus()).append("\n")
-      .append("Reason: ").append(request.getReason()).append("\n")
-      .append("Description: ").append(request.getDescription()).append("\n")
-      .append("Request Date: ").append(request.getRequestDate()).append("\n")
-      .append("Processed At: ").append(request.getProcessedAt()).append("\n")
-      .append("--------------------------------------\n");
-}
+    String[] columnNames = {
+        "Request ID", "Pet ID", "Pet Name", "Species", "Breed",
+        "Age", "Gender", "Weight(kg)", "Color", "Health Status",
+        "Status", "Reason", "Request Date", "Processed At"
+    };
 
-JTextArea textArea = new JTextArea(sb.toString(), 22, 50);
-textArea.setEditable(false);
-textArea.setLineWrap(true);
-textArea.setWrapStyleWord(true);
+    DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    };
 
-JOptionPane.showMessageDialog(
-        this,
-        new JScrollPane(textArea),
-        "My Surrender Requests",
-        JOptionPane.INFORMATION_MESSAGE
-);
+    for (SurrenderRequest request : requestList) {
+        model.addRow(new Object[]{
+            request.getSurrenderRequestId(),
+            request.getPetId(),
+            request.getPetName(),
+            request.getSpecies(),
+            request.getBreed(),
+            request.getAge(),
+            request.getGender(),
+            request.getWeight(),
+            request.getColor(),
+            request.getHealthStatus(),
+            request.getStatus(),
+            request.getReason(),
+            request.getRequestDate(),
+            request.getProcessedAt()
+        });
+    }
+
+    JTable table = new JTable(model);
+    table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+    JScrollPane scrollPane = new JScrollPane(table);
+    scrollPane.setPreferredSize(new java.awt.Dimension(1100, 320));
+
+    JOptionPane.showMessageDialog(
+            this,
+            scrollPane,
+            "My Surrender Requests",
+            JOptionPane.INFORMATION_MESSAGE
+    );
+
     }//GEN-LAST:event_ViewMyRequestsButtonActionPerformed
 
     private void BreedTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BreedTextFieldActionPerformed
@@ -407,6 +430,61 @@ JOptionPane.showMessageDialog(
         // TODO add your handling code here:
         
     }//GEN-LAST:event_WeightTextFieldActionPerformed
+
+    private void WithdrawRequestButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_WithdrawRequestButtonActionPerformed
+        // TODO add your handling code here:
+
+    if (currentUser == null) {
+        JOptionPane.showMessageDialog(this, "Current user is missing.");
+        return;
+    }
+
+    String input = JOptionPane.showInputDialog(
+            this,
+            "Enter the Request ID you want to withdraw:"
+    );
+
+    if (input == null) {
+        return;
+    }
+
+    input = input.trim();
+    if (input.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Request ID cannot be empty.");
+        return;
+    }
+
+    int requestId;
+    try {
+        requestId = Integer.parseInt(input);
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Request ID must be a number.");
+        return;
+    }
+
+    int confirm = JOptionPane.showConfirmDialog(
+            this,
+            "Are you sure you want to withdraw request #" + requestId + "?",
+            "Confirm Withdraw",
+            JOptionPane.YES_NO_OPTION
+    );
+
+    if (confirm != JOptionPane.YES_OPTION) {
+        return;
+    }
+
+    boolean success = system.withdrawSurrenderRequest(requestId, currentUser.getUserId());
+
+    if (success) {
+        JOptionPane.showMessageDialog(this, "Surrender request withdrawn successfully.");
+    } else {
+        JOptionPane.showMessageDialog(
+                this,
+                "Failed to withdraw request. Only your own requests with status Submitted can be withdrawn."
+        );
+    }
+
+    }//GEN-LAST:event_WithdrawRequestButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -459,5 +537,6 @@ JOptionPane.showMessageDialog(
     private javax.swing.JButton ViewMyRequestsButton;
     private javax.swing.JLabel WeightLabel;
     private javax.swing.JTextField WeightTextField;
+    private javax.swing.JButton WithdrawRequestButton;
     // End of variables declaration//GEN-END:variables
 }

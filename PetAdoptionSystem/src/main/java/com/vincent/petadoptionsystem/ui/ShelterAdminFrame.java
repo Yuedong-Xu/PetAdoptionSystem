@@ -10,7 +10,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import com.vincent.petadoptionsystem.model.SurrenderRequest;
-
+import com.vincent.petadoptionsystem.model.MedicalCheckRequest;
 /**
  *
  * @author Yuedong Xu
@@ -21,6 +21,7 @@ public class ShelterAdminFrame extends javax.swing.JFrame {
 private final PetAdoptionSystem system;
 private final User currentUser;
 private boolean viewingSurrenderRequests = false;
+private boolean viewingMedicalRequests = false;
     /**
      * Creates new form ShelterAdminFrame
      */
@@ -61,6 +62,8 @@ public ShelterAdminFrame() {
         ApproveButton = new javax.swing.JButton();
         RejectButton = new javax.swing.JButton();
         RefreshButton = new javax.swing.JButton();
+        ReviewMedicalButton = new javax.swing.JButton();
+        CancelMedicalButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -100,6 +103,11 @@ public ShelterAdminFrame() {
         RefreshButton.setText("Refresh");
         RefreshButton.addActionListener(this::RefreshButtonActionPerformed);
 
+        ReviewMedicalButton.setText("Review Medical Requests");
+        ReviewMedicalButton.addActionListener(this::ReviewMedicalButtonActionPerformed);
+
+        CancelMedicalButton.setText("Cancel Medical Request");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -110,12 +118,10 @@ public ShelterAdminFrame() {
                     .addComponent(ReviewAdoptionButton)
                     .addComponent(ReviewButton)
                     .addComponent(SendButton)
-                    .addComponent(LogoutButton))
+                    .addComponent(LogoutButton)
+                    .addComponent(ReviewMedicalButton)
+                    .addComponent(CancelMedicalButton))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
-                        .addComponent(ApplicationScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addGap(74, 74, 74)
                         .addComponent(ApproveButton)
@@ -123,7 +129,11 @@ public ShelterAdminFrame() {
                         .addComponent(RejectButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(RefreshButton)
-                        .addGap(151, 151, 151))))
+                        .addGap(151, 151, 151))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                        .addComponent(ApplicationScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 1248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
             .addGroup(layout.createSequentialGroup()
                 .addGap(113, 113, 113)
                 .addComponent(ShelterLabel)
@@ -140,6 +150,10 @@ public ShelterAdminFrame() {
                         .addComponent(ReviewButton)
                         .addGap(34, 34, 34)
                         .addComponent(ReviewAdoptionButton)
+                        .addGap(33, 33, 33)
+                        .addComponent(ReviewMedicalButton)
+                        .addGap(44, 44, 44)
+                        .addComponent(CancelMedicalButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(SendButton)
                         .addGap(34, 34, 34))
@@ -165,7 +179,9 @@ private void setupApplicationTable() {
         new Object[][]{},
         new String[]{
             "Application ID", "User ID", "Adopter Name",
-            "Pet ID", "Pet Name", "Species", "Breed", "Status"
+            "Pet ID", "Pet Name", "Species", "Breed", "Status",
+            "Monthly Income", "Living Area", "Number Of Pets",
+            "Experience", "Household Size", "Preferred Pet Type"
         }
     ));
     viewingSurrenderRequests = false;
@@ -181,6 +197,7 @@ private void setupSurrenderTable() {
         }
     ));
     viewingSurrenderRequests = true;
+    viewingMedicalRequests = false;
 }
 private void loadAllApplications() {
     setupApplicationTable();
@@ -199,7 +216,13 @@ private void loadAllApplications() {
             application.getPetName(),
             application.getSpecies(),
             application.getBreed(),
-            application.getStatus()
+            application.getStatus(),
+            application.getMonthlyIncome(),
+            application.getLivingArea(),
+            application.getNumberOfPets(),
+            application.getPetRaisingExperience(),
+            application.getNumberOfPeople(),
+            application.getPreferredPetType()
         });
     }
 
@@ -253,7 +276,9 @@ private void updateSelectedSurrenderRequest(String newStatus) {
 
     private void ApproveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ApproveButtonActionPerformed
         // TODO add your handling code here:
-     if (viewingSurrenderRequests) {
+    if (viewingMedicalRequests) {
+    JOptionPane.showMessageDialog(this, "Use Cancel Medical Request for medical requests.");
+} else if (viewingSurrenderRequests) {
     updateSelectedSurrenderRequest("Approved");
 } else {
     updateSelectedApplication("Approved");
@@ -263,7 +288,9 @@ private void updateSelectedSurrenderRequest(String newStatus) {
 
     private void RejectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RejectButtonActionPerformed
         // TODO add your handling code here:
-if (viewingSurrenderRequests) {
+if (viewingMedicalRequests) {
+    JOptionPane.showMessageDialog(this, "Use Cancel Medical Request for medical requests.");
+} else if (viewingSurrenderRequests) {
     updateSelectedSurrenderRequest("Rejected");
 } else {
     updateSelectedApplication("Rejected");
@@ -273,7 +300,9 @@ if (viewingSurrenderRequests) {
 
     private void RefreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshButtonActionPerformed
         // TODO add your handling code here:
-if (viewingSurrenderRequests) {
+if (viewingMedicalRequests) {
+    loadMedicalRequestsByShelter();
+} else if (viewingSurrenderRequests) {
     loadAllSurrenderRequests();
 } else {
     loadAllApplications();
@@ -283,14 +312,16 @@ if (viewingSurrenderRequests) {
 
     private void SendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SendButtonActionPerformed
         // TODO add your handling code here:
-     if (viewingSurrenderRequests) {
-    JOptionPane.showMessageDialog(this, "Please switch to Adoption Applications first.");
-    return;
-}   
+     
+    if (!viewingSurrenderRequests) {
+        JOptionPane.showMessageDialog(this, "Please switch to Surrender Requests first.");
+        return;
+    }
+
     int selectedRow = ApplicationTable.getSelectedRow();
 
     if (selectedRow == -1) {
-        JOptionPane.showMessageDialog(this, "Please select an adoption application first.");
+        JOptionPane.showMessageDialog(this, "Please select a surrender request first.");
         return;
     }
 
@@ -301,22 +332,22 @@ if (viewingSurrenderRequests) {
 
     DefaultTableModel model = (DefaultTableModel) ApplicationTable.getModel();
 
-    int applicationId = Integer.parseInt(model.getValueAt(selectedRow, 0).toString());
     int petId = Integer.parseInt(model.getValueAt(selectedRow, 3).toString());
-    String currentStatus = model.getValueAt(selectedRow, 7).toString();
+    String currentStatus = model.getValueAt(selectedRow, 13).toString();
 
-    if (!"Submitted".equalsIgnoreCase(currentStatus) && !"Approved".equalsIgnoreCase(currentStatus)) {
-        JOptionPane.showMessageDialog(this, "Medical check request can only be sent for Submitted or Approved applications.");
+    if (!"Approved".equalsIgnoreCase(currentStatus)) {
+        JOptionPane.showMessageDialog(this, "Medical check request can only be sent after the surrender request is approved.");
         return;
     }
 
-  boolean success = system.createMedicalCheckRequest(petId, currentUser.getUserId());
+    boolean success = system.createMedicalCheckRequest(petId, currentUser.getUserId());
 
     if (success) {
         JOptionPane.showMessageDialog(this, "Medical check request sent successfully.");
     } else {
-        JOptionPane.showMessageDialog(this, "Request failed. Please check the console output for the exact database error.");
+        JOptionPane.showMessageDialog(this, "Request failed. Please check whether this pet already has an active medical request.");
     }
+
 
     }//GEN-LAST:event_SendButtonActionPerformed
 
@@ -330,6 +361,11 @@ if (viewingSurrenderRequests) {
         new MainFrame().setVisible(true);
 this.dispose();
     }//GEN-LAST:event_LogoutButtonActionPerformed
+
+    private void ReviewMedicalButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReviewMedicalButtonActionPerformed
+        // TODO add your handling code here:
+         loadMedicalRequestsByShelter();
+    }//GEN-LAST:event_ReviewMedicalButtonActionPerformed
 private void loadAllSurrenderRequests() {
     setupSurrenderTable();
 
@@ -401,6 +437,102 @@ private void updateSelectedApplication(String newStatus) {
         JOptionPane.showMessageDialog(this, "Failed to update application status.");
     }
 }
+private void setupMedicalRequestTable() {
+    ApplicationTable.setModel(new DefaultTableModel(
+        new Object[][]{},
+        new String[]{
+            "Request ID", "Pet ID", "Pet Name",
+            "Shelter ID", "Clinic ID", "Request Date",
+            "Status", "Description", "Created By", "Handled By", "Processed At"
+        }
+    ));
+    viewingSurrenderRequests = false;
+    viewingMedicalRequests = true;
+}
+private void loadMedicalRequestsByShelter() {
+    setupMedicalRequestTable();
+
+    if (currentUser == null || currentUser.getOrganizationId() == null) {
+        JOptionPane.showMessageDialog(this, "Current shelter organization is missing.");
+        return;
+    }
+
+    List<MedicalCheckRequest> requestList =
+            system.getMedicalCheckRequestsByShelterId(currentUser.getOrganizationId());
+
+    DefaultTableModel model = (DefaultTableModel) ApplicationTable.getModel();
+    model.setRowCount(0);
+
+    for (MedicalCheckRequest request : requestList) {
+        model.addRow(new Object[]{
+            request.getMedicalCheckRequestId(),
+            request.getPetId(),
+            request.getPetName(),
+            request.getShelterId(),
+            request.getClinicId(),
+            request.getRequestDate(),
+            request.getStatus(),
+            request.getDescription(),
+            request.getCreatedByUserId(),
+            request.getHandledByUserId(),
+            request.getProcessedAt()
+        });
+    }
+
+    if (requestList.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "No medical check requests found for your shelter.");
+    }
+}
+private void CancelMedicalButtonActionPerformed(java.awt.event.ActionEvent evt) {
+    if (!viewingMedicalRequests) {
+        JOptionPane.showMessageDialog(this, "Please switch to Medical Requests first.");
+        return;
+    }
+
+    int selectedRow = ApplicationTable.getSelectedRow();
+
+    if (selectedRow == -1) {
+        JOptionPane.showMessageDialog(this, "Please select a medical request first.");
+        return;
+    }
+
+    if (currentUser == null) {
+        JOptionPane.showMessageDialog(this, "Current admin user is missing.");
+        return;
+    }
+
+    DefaultTableModel model = (DefaultTableModel) ApplicationTable.getModel();
+
+    int requestId = Integer.parseInt(model.getValueAt(selectedRow, 0).toString());
+    String currentStatus = model.getValueAt(selectedRow, 6).toString();
+
+    if (!"Submitted".equalsIgnoreCase(currentStatus) &&
+        !"In Progress".equalsIgnoreCase(currentStatus)) {
+        JOptionPane.showMessageDialog(this, "Only Submitted or In Progress medical requests can be cancelled.");
+        return;
+    }
+
+    int confirm = JOptionPane.showConfirmDialog(
+            this,
+            "Are you sure you want to cancel this medical request?",
+            "Confirm Cancel",
+            JOptionPane.YES_NO_OPTION
+    );
+
+    if (confirm != JOptionPane.YES_OPTION) {
+        return;
+    }
+
+    boolean success = system.cancelMedicalCheckRequest(requestId, currentUser.getUserId());
+
+    if (success) {
+        JOptionPane.showMessageDialog(this, "Medical check request cancelled successfully.");
+        loadMedicalRequestsByShelter();
+    } else {
+        JOptionPane.showMessageDialog(this, "Failed to cancel medical check request.");
+    }
+}
+
     /**
      * @param args the command line arguments
      */
@@ -431,11 +563,13 @@ private void updateSelectedApplication(String newStatus) {
     private javax.swing.JScrollPane ApplicationScrollPane;
     private javax.swing.JTable ApplicationTable;
     private javax.swing.JButton ApproveButton;
+    private javax.swing.JButton CancelMedicalButton;
     private javax.swing.JButton LogoutButton;
     private javax.swing.JButton RefreshButton;
     private javax.swing.JButton RejectButton;
     private javax.swing.JButton ReviewAdoptionButton;
     private javax.swing.JButton ReviewButton;
+    private javax.swing.JButton ReviewMedicalButton;
     private javax.swing.JButton SendButton;
     private javax.swing.JLabel ShelterLabel;
     // End of variables declaration//GEN-END:variables

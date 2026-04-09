@@ -5,7 +5,7 @@
 package com.vincent.petadoptionsystem.ui;
 
 
-import com.vincent.petadoptionsystem.service.PetAdoptionSystem;
+
 
 import com.vincent.petadoptionsystem.model.AdoptionApplication;
 import com.vincent.petadoptionsystem.model.Pet;
@@ -14,6 +14,13 @@ import com.vincent.petadoptionsystem.service.PetAdoptionSystem;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import com.vincent.petadoptionsystem.model.AdopterProfile;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 /**
  *
  * @author vincent
@@ -28,12 +35,11 @@ private boolean showingPetList = false;
      * Creates new form AdopterFrame
      * @param user
      */
- public AdopterFrame(User user) {
+public AdopterFrame(User user) {
     initComponents();
     system = PetAdoptionSystem.getInstance();
     this.currentUser = user;
 
-    ViewButton.addActionListener(this::ViewButtonActionPerformed);
     LogoutButton.addActionListener(this::LogoutButtonActionPerformed);
 
     petTable.setModel(new DefaultTableModel(
@@ -65,6 +71,8 @@ private boolean showingPetList = false;
         PetPane = new javax.swing.JScrollPane();
         petTable = new javax.swing.JTable();
         SubmitApplicationButton = new javax.swing.JButton();
+        ManageProfileButton = new javax.swing.JButton();
+        WithdrawApplicationButton = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -87,6 +95,7 @@ private boolean showingPetList = false;
         BrowsePetsButton.addActionListener(this::BrowsePetsButtonActionPerformed);
 
         ViewButton.setText("View My Applications");
+        ViewButton.addActionListener(this::ViewButtonActionPerformed);
 
         LogoutButton.setText("Logout");
 
@@ -106,6 +115,12 @@ private boolean showingPetList = false;
         SubmitApplicationButton.setText("Submit Adoption Application");
         SubmitApplicationButton.addActionListener(this::SubmitApplicationButtonActionPerformed);
 
+        ManageProfileButton.setText("Register / Manage Profile");
+        ManageProfileButton.addActionListener(this::ManageProfileButtonActionPerformed);
+
+        WithdrawApplicationButton.setText("Withdraw Selected Application");
+        WithdrawApplicationButton.addActionListener(this::WithdrawApplicationButtonActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -121,8 +136,10 @@ private boolean showingPetList = false;
                             .addComponent(ViewButton)
                             .addComponent(BrowsePetsButton)
                             .addComponent(LogoutButton)
-                            .addComponent(SubmitApplicationButton))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                            .addComponent(SubmitApplicationButton)
+                            .addComponent(ManageProfileButton)
+                            .addComponent(WithdrawApplicationButton))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
                         .addComponent(PetPane, javax.swing.GroupLayout.PREFERRED_SIZE, 489, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(44, 44, 44))
         );
@@ -141,11 +158,15 @@ private boolean showingPetList = false;
                         .addComponent(BrowsePetsButton)
                         .addGap(44, 44, 44)
                         .addComponent(ViewButton)
-                        .addGap(35, 35, 35)
-                        .addComponent(LogoutButton)
+                        .addGap(101, 101, 101)
+                        .addComponent(ManageProfileButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(SubmitApplicationButton)
-                        .addGap(107, 107, 107))))
+                        .addGap(18, 18, 18)
+                        .addComponent(WithdrawApplicationButton)
+                        .addGap(43, 43, 43)
+                        .addComponent(LogoutButton)
+                        .addGap(39, 39, 39))))
         );
 
         pack();
@@ -181,11 +202,26 @@ private void loadAvailablePets() {
     }
 
     petTable.setModel(model);
+}private boolean isAdopterProfileComplete(AdopterProfile profile) {
+    return profile != null
+            && profile.getMonthlyIncome() != null
+            && profile.getLivingArea() != null && !profile.getLivingArea().trim().isEmpty()
+            && profile.getPetRaisingExperience() != null && !profile.getPetRaisingExperience().trim().isEmpty()
+            && profile.getNumberOfPeople() != null
+            && profile.getPreferredPetType() != null && !profile.getPreferredPetType().trim().isEmpty();
 }
     private void SubmitApplicationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubmitApplicationButtonActionPerformed
         // TODO add your handling code here:
         
-   
+   AdopterProfile profile = system.getAdopterProfileByUserId(currentUser.getUserId());
+
+if (!isAdopterProfileComplete(profile)) {
+    JOptionPane.showMessageDialog(
+            this,
+            "Please complete your adopter profile before submitting an adoption application."
+    );
+    return;
+}
     if (!showingPetList) {
         JOptionPane.showMessageDialog(this, "Please click Browse Pets first, then select a pet.");
         return;
@@ -219,25 +255,148 @@ private void loadAvailablePets() {
 
 
     }//GEN-LAST:event_SubmitApplicationButtonActionPerformed
-private void ViewButtonActionPerformed(java.awt.event.ActionEvent evt) {
-    List<AdoptionApplication> applicationList =
+
+    private void ManageProfileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ManageProfileButtonActionPerformed
+        // TODO add your handling code here:
+      
+    AdopterProfile existingProfile = system.getAdopterProfileByUserId(currentUser.getUserId());
+
+    JTextField monthlyIncomeField = new JTextField(
+            existingProfile != null && existingProfile.getMonthlyIncome() != null
+                    ? String.valueOf(existingProfile.getMonthlyIncome()) : ""
+    );
+
+    JTextField livingAreaField = new JTextField(
+            existingProfile != null && existingProfile.getLivingArea() != null
+                    ? existingProfile.getLivingArea() : ""
+    );
+
+    JSpinner numberOfPetsSpinner = new JSpinner(
+            new SpinnerNumberModel(
+                    existingProfile != null ? existingProfile.getNumberOfPets() : 0,
+                    0, 20, 1
+            )
+    );
+
+    JTextField experienceField = new JTextField(
+            existingProfile != null && existingProfile.getPetRaisingExperience() != null
+                    ? existingProfile.getPetRaisingExperience() : ""
+    );
+
+    JSpinner numberOfPeopleSpinner = new JSpinner(
+            new SpinnerNumberModel(
+                    existingProfile != null && existingProfile.getNumberOfPeople() != null
+                            ? existingProfile.getNumberOfPeople() : 1,
+                    1, 20, 1
+            )
+    );
+
+    JComboBox<String> preferredPetTypeCombo = new JComboBox<>(
+            new String[]{"Any", "Dog", "Cat", "Rabbit", "Bird", "Other"}
+    );
+    preferredPetTypeCombo.setEditable(true);
+
+    if (existingProfile != null && existingProfile.getPreferredPetType() != null) {
+        preferredPetTypeCombo.setSelectedItem(existingProfile.getPreferredPetType());
+    }
+
+    JPanel panel = new JPanel(new java.awt.GridLayout(0, 2, 8, 8));
+    panel.add(new JLabel("Monthly Income:"));
+    panel.add(monthlyIncomeField);
+
+    panel.add(new JLabel("Living Area:"));
+    panel.add(livingAreaField);
+
+    panel.add(new JLabel("Number Of Pets:"));
+    panel.add(numberOfPetsSpinner);
+
+    panel.add(new JLabel("Pet Raising Experience:"));
+    panel.add(experienceField);
+
+    panel.add(new JLabel("Number Of People In Home:"));
+    panel.add(numberOfPeopleSpinner);
+
+    panel.add(new JLabel("Preferred Pet Type:"));
+    panel.add(preferredPetTypeCombo);
+
+    int result = JOptionPane.showConfirmDialog(
+            this,
+            panel,
+            existingProfile == null ? "Create Adopter Profile" : "Update Adopter Profile",
+            JOptionPane.OK_CANCEL_OPTION,
+            JOptionPane.PLAIN_MESSAGE
+    );
+
+    if (result != JOptionPane.OK_OPTION) {
+        return;
+    }
+
+    Double monthlyIncome = null;
+    String incomeText = monthlyIncomeField.getText().trim();
+    if (!incomeText.isEmpty()) {
+        try {
+            monthlyIncome = Double.parseDouble(incomeText);
+            if (monthlyIncome < 0) {
+                JOptionPane.showMessageDialog(this, "Monthly income cannot be negative.");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Monthly income must be a valid number.");
+            return;
+        }
+    }
+
+    String livingArea = livingAreaField.getText().trim();
+    String experience = experienceField.getText().trim();
+    int numberOfPets = (Integer) numberOfPetsSpinner.getValue();
+    Integer numberOfPeople = (Integer) numberOfPeopleSpinner.getValue();
+    String preferredPetType = preferredPetTypeCombo.getSelectedItem() == null
+            ? null
+            : preferredPetTypeCombo.getSelectedItem().toString().trim();
+
+    AdopterProfile profile = new AdopterProfile();
+    profile.setUserId(currentUser.getUserId());
+    profile.setMonthlyIncome(monthlyIncome);
+    profile.setLivingArea(livingArea.isEmpty() ? null : livingArea);
+    profile.setNumberOfPets(numberOfPets);
+    profile.setPetRaisingExperience(experience.isEmpty() ? null : experience);
+    profile.setNumberOfPeople(numberOfPeople);
+    profile.setPreferredPetType(preferredPetType == null || preferredPetType.isEmpty() ? null : preferredPetType);
+
+    boolean success = system.saveAdopterProfile(profile);
+
+    if (success) {
+        JOptionPane.showMessageDialog(this,
+                existingProfile == null
+                        ? "Adopter profile created successfully."
+                        : "Adopter profile updated successfully.");
+    } else {
+        JOptionPane.showMessageDialog(this, "Failed to save adopter profile.");
+    }
+
+    }//GEN-LAST:event_ManageProfileButtonActionPerformed
+
+    private void ViewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ViewButtonActionPerformed
+        // TODO add your handling code here:
+        List<AdoptionApplication> applicationList =
             system.getApplicationsByUserId(currentUser.getUserId());
 
     showingPetList = false;
 
     DefaultTableModel model = new DefaultTableModel();
     model.setColumnIdentifiers(new String[]{
-        "Pet ID", "Pet Name", "Species", "Breed", "Status"
+        "Application ID", "Pet ID", "Pet Name", "Species", "Breed", "Status"
     });
 
     for (AdoptionApplication application : applicationList) {
         model.addRow(new Object[]{
-            application.getPetId(),
-            application.getPetName(),
-            application.getSpecies(),
-            application.getBreed(),
-            application.getStatus()
-        });
+    application.getApplicationId(),
+    application.getPetId(),
+    application.getPetName(),
+    application.getSpecies(),
+    application.getBreed(),
+    application.getStatus()
+});
     }
 
     petTable.setModel(model);
@@ -245,11 +404,68 @@ private void ViewButtonActionPerformed(java.awt.event.ActionEvent evt) {
     if (applicationList.isEmpty()) {
         JOptionPane.showMessageDialog(this, "You have not submitted any adoption applications yet.");
     }
+
+    }//GEN-LAST:event_ViewButtonActionPerformed
+
+    private void WithdrawApplicationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_WithdrawApplicationButtonActionPerformed
+        // TODO add your handling code here:
+       
+    if (showingPetList) {
+        JOptionPane.showMessageDialog(this, "Please click View My Applications first.");
+        return;
+    }
+
+    int selectedRow = petTable.getSelectedRow();
+
+    if (selectedRow == -1) {
+        JOptionPane.showMessageDialog(this, "Please select an application first.");
+        return;
+    }
+
+    Object applicationIdValue = petTable.getValueAt(selectedRow, 0);
+    Object statusValue = petTable.getValueAt(selectedRow, 5);
+
+    if (applicationIdValue == null || statusValue == null) {
+        JOptionPane.showMessageDialog(this, "Selected row is invalid.");
+        return;
+    }
+
+    int applicationId = Integer.parseInt(applicationIdValue.toString());
+    String status = statusValue.toString();
+
+    if (!"Submitted".equalsIgnoreCase(status)) {
+        JOptionPane.showMessageDialog(this, "Only applications with status Submitted can be withdrawn.");
+        return;
+    }
+
+    int confirm = JOptionPane.showConfirmDialog(
+            this,
+            "Are you sure you want to withdraw this application?",
+            "Confirm Withdraw",
+            JOptionPane.YES_NO_OPTION
+    );
+
+    if (confirm != JOptionPane.YES_OPTION) {
+        return;
+    }
+
+    boolean success = system.withdrawAdoptionApplication(applicationId, currentUser.getUserId());
+
+    if (success) {
+        JOptionPane.showMessageDialog(this, "Application withdrawn successfully.");
+        ViewButtonActionPerformed(null);
+    } else {
+        JOptionPane.showMessageDialog(this, "Failed to withdraw application.");
+    
 }
+    }//GEN-LAST:event_WithdrawApplicationButtonActionPerformed
+
+    
 private void LogoutButtonActionPerformed(java.awt.event.ActionEvent evt) {
     new MainFrame().setVisible(true);
     this.dispose();
 }
+
     /**
      * @param args the command line arguments
      */
@@ -259,9 +475,11 @@ private void LogoutButtonActionPerformed(java.awt.event.ActionEvent evt) {
     private javax.swing.JLabel AdopterLabel;
     private javax.swing.JButton BrowsePetsButton;
     private javax.swing.JButton LogoutButton;
+    private javax.swing.JButton ManageProfileButton;
     private javax.swing.JScrollPane PetPane;
     private javax.swing.JButton SubmitApplicationButton;
     private javax.swing.JButton ViewButton;
+    private javax.swing.JButton WithdrawApplicationButton;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable petTable;

@@ -11,6 +11,7 @@ package com.vincent.petadoptionsystem.ui;
 import com.vincent.petadoptionsystem.model.User;
 import com.vincent.petadoptionsystem.service.PetAdoptionSystem;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 public class MainFrame extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MainFrame.class.getName());
@@ -19,11 +20,25 @@ private PetAdoptionSystem system;
      * Creates new form MainFrame
      */
     public MainFrame() {
-        initComponents();
-         system = PetAdoptionSystem.getInstance();
-         PasswordPasswordField.setEchoChar((char) 0);
-        setLocationRelativeTo(null);
-    }
+    initComponents();
+    system = PetAdoptionSystem.getInstance();
+    PasswordPasswordField.setEchoChar((char) 0);
+
+    DemoAccountsTextArea.setEditable(false);
+    DemoAccountsTextArea.setLineWrap(true);
+    DemoAccountsTextArea.setWrapStyleWord(true);
+    DemoAccountsTextArea.setText(
+            "Use your seeded demo accounts below:\n" +
+            "Adopter: adopter@test.com / 123456\n" +
+            "Surrender Owner: owner@test.com / 123456\n" +
+            "Shelter Admin: shelter@test.com / 123456\n" +
+            "Vet Staff: vet@test.com / 123456"
+          
+    );
+    DemoAccountsTextArea.setCaretPosition(0);
+
+    setLocationRelativeTo(null);
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -40,10 +55,13 @@ private PetAdoptionSystem system;
         PasswordLabel = new javax.swing.JLabel();
         PasswordPasswordField = new javax.swing.JPasswordField();
         LoginButton = new javax.swing.JButton();
+        DemoAccountsLabel = new javax.swing.JLabel();
+        DemoAccountsScrollPane = new javax.swing.JScrollPane();
+        DemoAccountsTextArea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        TitleLabel.setText("Pet Adoption System Login");
+        TitleLabel.setText("Pet Adoption System Login Portal");
 
         EmailLabel.setText("Email:");
 
@@ -57,46 +75,63 @@ private PetAdoptionSystem system;
         LoginButton.setText("Login");
         LoginButton.addActionListener(this::LoginButtonActionPerformed);
 
+        DemoAccountsLabel.setText("Demo Accounts");
+
+        DemoAccountsTextArea.setColumns(20);
+        DemoAccountsTextArea.setRows(5);
+        DemoAccountsScrollPane.setViewportView(DemoAccountsTextArea);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(122, Short.MAX_VALUE)
-                .addComponent(TitleLabel)
-                .addGap(120, 120, 120))
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(115, 115, 115)
+                        .addComponent(TitleLabel)
+                        .addGap(138, 138, 138))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(67, 67, 67)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(EmailLabel)
-                            .addComponent(PasswordLabel))
-                        .addGap(31, 31, 31)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(EmailTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
-                            .addComponent(PasswordPasswordField)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(149, 149, 149)
-                        .addComponent(LoginButton)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(PasswordLabel)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(EmailLabel)
+                                    .addComponent(DemoAccountsLabel))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(DemoAccountsScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 577, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(150, 150, 150)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(PasswordPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(EmailTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(LoginButton))))))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(68, 68, 68)
+                .addContainerGap()
                 .addComponent(TitleLabel)
-                .addGap(29, 29, 29)
+                .addGap(35, 35, 35)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(DemoAccountsLabel)
+                    .addComponent(DemoAccountsScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(EmailLabel)
                     .addComponent(EmailTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(39, 39, 39)
+                .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(PasswordLabel)
                     .addComponent(PasswordPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                .addGap(32, 32, 32)
                 .addComponent(LoginButton)
-                .addGap(36, 36, 36))
+                .addGap(24, 24, 24))
         );
 
         pack();
@@ -176,6 +211,9 @@ private void openRoleWindow(User user) {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel DemoAccountsLabel;
+    private javax.swing.JScrollPane DemoAccountsScrollPane;
+    private javax.swing.JTextArea DemoAccountsTextArea;
     private javax.swing.JLabel EmailLabel;
     private javax.swing.JTextField EmailTextField;
     private javax.swing.JButton LoginButton;

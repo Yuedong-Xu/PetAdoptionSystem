@@ -235,94 +235,175 @@ public class SurrenderRequestDAO {
     }
 
     public boolean reviewSurrenderRequest(int requestId, String status, int handledByUserId, Integer shelterId) {
-        Connection conn = null;
+    Connection conn = null;
 
-        try {
-            conn = DatabaseManager.getConnection();
-            conn.setAutoCommit(false);
+    try {
+        conn = DatabaseManager.getConnection();
+        conn.setAutoCommit(false);
 
-            int petId = -1;
+        int petId = -1;
 
-            String findPetSql = "SELECT PetId FROM SurrenderRequests WHERE SurrenderRequestId = ?";
-            try (PreparedStatement findPs = conn.prepareStatement(findPetSql)) {
-                findPs.setInt(1, requestId);
+        String findPetSql = "SELECT PetId FROM SurrenderRequests WHERE SurrenderRequestId = ?";
+        try (PreparedStatement findPs = conn.prepareStatement(findPetSql)) {
+            findPs.setInt(1, requestId);
 
-                try (ResultSet rs = findPs.executeQuery()) {
-                    if (rs.next()) {
-                        petId = rs.getInt("PetId");
-                    } else {
-                        conn.rollback();
-                        return false;
-                    }
-                }
-            }
-
-            String updateRequestSql = "UPDATE SurrenderRequests " +
-                                      "SET Status = ?, HandledByUserId = ?, ProcessedAt = NOW() " +
-                                      "WHERE SurrenderRequestId = ?";
-            try (PreparedStatement updatePs = conn.prepareStatement(updateRequestSql)) {
-                updatePs.setString(1, status);
-                updatePs.setInt(2, handledByUserId);
-                updatePs.setInt(3, requestId);
-
-                int rows = updatePs.executeUpdate();
-                if (rows == 0) {
+            try (ResultSet rs = findPs.executeQuery()) {
+                if (rs.next()) {
+                    petId = rs.getInt("PetId");
+                } else {
                     conn.rollback();
                     return false;
                 }
             }
+        }
 
-            if ("Approved".equalsIgnoreCase(status)) {
-                if (shelterId != null) {
-                    String updatePetSql = "UPDATE Pets " +
-                                          "SET ShelterId = ?, AdoptionStatus = 'Submitted', HealthCheckStatus = 'Pending' " +
-                                          "WHERE PetId = ?";
-                    try (PreparedStatement petPs = conn.prepareStatement(updatePetSql)) {
-                        petPs.setInt(1, shelterId);
-                        petPs.setInt(2, petId);
-                        petPs.executeUpdate();
-                    }
-                } else {
-                    String updatePetSql = "UPDATE Pets " +
-                                          "SET AdoptionStatus = 'Submitted', HealthCheckStatus = 'Pending' " +
-                                          "WHERE PetId = ?";
-                    try (PreparedStatement petPs = conn.prepareStatement(updatePetSql)) {
-                        petPs.setInt(1, petId);
-                        petPs.executeUpdate();
-                    }
-                }
-            }else if ("Rejected".equalsIgnoreCase(status)) {
-    String updatePetSql = "UPDATE Pets SET AdoptionStatus = 'Rejected' WHERE PetId = ?";
-    try (PreparedStatement petPs = conn.prepareStatement(updatePetSql)) {
-        petPs.setInt(1, petId);
-        petPs.executeUpdate();
-    }
-}
+        String updateRequestSql = "UPDATE SurrenderRequests " +
+                                  "SET Status = ?, HandledByUserId = ?, ProcessedAt = NOW() " +
+                                  "WHERE SurrenderRequestId = ?";
+        try (PreparedStatement updatePs = conn.prepareStatement(updateRequestSql)) {
+            updatePs.setString(1, status);
+            updatePs.setInt(2, handledByUserId);
+            updatePs.setInt(3, requestId);
 
-            conn.commit();
-            return true;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            if (conn != null) {
-                try {
-                    conn.rollback();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+            int rows = updatePs.executeUpdate();
+            if (rows == 0) {
+                conn.rollback();
+                return false;
             }
-        } finally {
-            if (conn != null) {
-                try {
-                    conn.setAutoCommit(true);
-                    conn.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
+        }
+
+        if ("Approved".equalsIgnoreCase(status)) {
+            if (shelterId == null) {
+                conn.rollback();
+                return false;
+            }
+
+            String updatePetSql = "UPDATE Pets " +
+                                  "SET ShelterId = ?, AdoptionStatus = 'Accepted', HealthCheckStatus = 'Pending' " +
+                                  "WHERE PetId = ?";
+            try (PreparedStatement petPs = conn.prepareStatement(updatePetSql)) {
+                petPs.setInt(1, shelterId);
+                petPs.setInt(2, petId);
+                petPs.executeUpdate();
+            }
+
+        } else if ("Rejected".equalsIgnoreCase(status)) {
+            String updatePetSql = "UPDATE Pets " +
+                                  "SET AdoptionStatus = 'Rejected' " +
+                                  "WHERE PetId = ?";
+            try (PreparedStatement petPs = conn.prepareStatement(updatePetSql)) {
+                petPs.setInt(1, petId);
+                petPs.executeUpdate();
+            }
+        }
+
+        conn.commit();
+        return true;
+
+    } catch (Exception e) {
+        e.printStackTrace();
+
+        if (conn != null) {
+            try {
+                conn.rollback();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    } finally {
+        if (conn != null) {
+            try {
+                conn.setAutoCommit(true);
+                conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    return false;
+}
+    public boolean withdrawSurrenderRequest(int requestId, int userId) {
+    Connection conn = null;
+
+    try {
+        conn = DatabaseManager.getConnection();
+        conn.setAutoCommit(false);
+
+        int petId = -1;
+        String status = null;
+
+        String findSql = "SELECT PetId, Status FROM SurrenderRequests " +
+                         "WHERE SurrenderRequestId = ? AND UserId = ?";
+        try (PreparedStatement findPs = conn.prepareStatement(findSql)) {
+            findPs.setInt(1, requestId);
+            findPs.setInt(2, userId);
+
+            try (ResultSet rs = findPs.executeQuery()) {
+                if (rs.next()) {
+                    petId = rs.getInt("PetId");
+                    status = rs.getString("Status");
+                } else {
+                    conn.rollback();
+                    return false;
                 }
             }
         }
 
-        return false;
+        if (!"Submitted".equalsIgnoreCase(status)) {
+            conn.rollback();
+            return false;
+        }
+
+        String deleteRequestSql = "DELETE FROM SurrenderRequests " +
+                                  "WHERE SurrenderRequestId = ? AND UserId = ? AND Status = 'Submitted'";
+        try (PreparedStatement deleteRequestPs = conn.prepareStatement(deleteRequestSql)) {
+            deleteRequestPs.setInt(1, requestId);
+            deleteRequestPs.setInt(2, userId);
+
+            int requestRows = deleteRequestPs.executeUpdate();
+            if (requestRows == 0) {
+                conn.rollback();
+                return false;
+            }
+        }
+
+        String deletePetSql = "DELETE FROM Pets " +
+                              "WHERE PetId = ? AND ShelterId IS NULL AND AdoptionStatus = 'Submitted'";
+        try (PreparedStatement deletePetPs = conn.prepareStatement(deletePetSql)) {
+            deletePetPs.setInt(1, petId);
+
+            int petRows = deletePetPs.executeUpdate();
+            if (petRows == 0) {
+                conn.rollback();
+                return false;
+            }
+        }
+
+        conn.commit();
+        return true;
+
+    } catch (Exception e) {
+        e.printStackTrace();
+
+        if (conn != null) {
+            try {
+                conn.rollback();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    } finally {
+        if (conn != null) {
+            try {
+                conn.setAutoCommit(true);
+                conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
+
+    return false;
+}
 }

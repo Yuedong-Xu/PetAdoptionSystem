@@ -9,11 +9,14 @@ package com.vincent.petadoptionsystem.service;
  * @author Yuedong Xu
  */
 
+
+import com.vincent.petadoptionsystem.dao.AdopterProfileDAO;
 import com.vincent.petadoptionsystem.dao.AdoptionApplicationDAO;
 import com.vincent.petadoptionsystem.dao.MedicalCheckRequestDAO;
 import com.vincent.petadoptionsystem.dao.PetDAO;
 import com.vincent.petadoptionsystem.dao.SurrenderRequestDAO;
 import com.vincent.petadoptionsystem.dao.UserDAO;
+import com.vincent.petadoptionsystem.model.AdopterProfile;
 import com.vincent.petadoptionsystem.model.AdoptionApplication;
 import com.vincent.petadoptionsystem.model.MedicalCheckRequest;
 import com.vincent.petadoptionsystem.model.Pet;
@@ -24,11 +27,13 @@ import java.util.List;
 public class PetAdoptionSystem {
 
     private static PetAdoptionSystem instance;
+
     private final AdoptionApplicationDAO adoptionApplicationDAO;
     private final UserDAO userDAO;
     private final PetDAO petDAO;
     private final MedicalCheckRequestDAO medicalCheckRequestDAO;
     private final SurrenderRequestDAO surrenderRequestDAO;
+    private final AdopterProfileDAO adopterProfileDAO;
 
     private PetAdoptionSystem() {
         userDAO = new UserDAO();
@@ -36,6 +41,7 @@ public class PetAdoptionSystem {
         adoptionApplicationDAO = new AdoptionApplicationDAO();
         medicalCheckRequestDAO = new MedicalCheckRequestDAO();
         surrenderRequestDAO = new SurrenderRequestDAO();
+        adopterProfileDAO = new AdopterProfileDAO();
     }
 
     public static PetAdoptionSystem getInstance() {
@@ -82,52 +88,52 @@ public class PetAdoptionSystem {
     }
 
     public boolean submitMedicalReport(
-        int requestId,
-        int vetUserId,
-        String diagnosis,
-        String vaccinationStatus,
-        String recommendation,
-        String resultStatus,
-        String newHealthStatus
-) {
-    return medicalCheckRequestDAO.submitMedicalReport(
-            requestId,
-            vetUserId,
-            diagnosis,
-            vaccinationStatus,
-            recommendation,
-            resultStatus,
-            newHealthStatus
-    );
-}
+            int requestId,
+            int vetUserId,
+            String diagnosis,
+            String vaccinationStatus,
+            String recommendation,
+            String resultStatus,
+            String newHealthStatus
+    ) {
+        return medicalCheckRequestDAO.submitMedicalReport(
+                requestId,
+                vetUserId,
+                diagnosis,
+                vaccinationStatus,
+                recommendation,
+                resultStatus,
+                newHealthStatus
+        );
+    }
 
     public boolean createSurrenderRequest(
-        int userId,
-        String petName,
-        String species,
-        String breed,
-        int age,
-        String gender,
-        double weight,
-        String color,
-        String healthStatus,
-        String reason,
-        String description
-) {
-    return surrenderRequestDAO.createSurrenderRequest(
-            userId,
-            petName,
-            species,
-            breed,
-            age,
-            gender,
-            weight,
-            color,
-            healthStatus,
-            reason,
-            description
-    );
-}
+            int userId,
+            String petName,
+            String species,
+            String breed,
+            int age,
+            String gender,
+            double weight,
+            String color,
+            String healthStatus,
+            String reason,
+            String description
+    ) {
+        return surrenderRequestDAO.createSurrenderRequest(
+                userId,
+                petName,
+                species,
+                breed,
+                age,
+                gender,
+                weight,
+                color,
+                healthStatus,
+                reason,
+                description
+        );
+    }
 
     public List<SurrenderRequest> getSurrenderRequestsByUserId(int userId) {
         return surrenderRequestDAO.getRequestsByUserId(userId);
@@ -140,4 +146,33 @@ public class PetAdoptionSystem {
     public boolean reviewSurrenderRequest(int requestId, String status, int handledByUserId, Integer shelterId) {
         return surrenderRequestDAO.reviewSurrenderRequest(requestId, status, handledByUserId, shelterId);
     }
+
+    public AdopterProfile getAdopterProfileByUserId(int userId) {
+        return adopterProfileDAO.getProfileByUserId(userId);
+    }
+
+    public boolean saveAdopterProfile(AdopterProfile profile) {
+        return adopterProfileDAO.saveOrUpdateProfile(profile);
+    }
+    public boolean withdrawAdoptionApplication(int applicationId, int userId) {
+    return adoptionApplicationDAO.withdrawApplication(applicationId, userId);
+}
+    public List<MedicalCheckRequest> getMedicalCheckRequestsByClinicId(int clinicId) {
+    return medicalCheckRequestDAO.getMedicalCheckRequestsByClinicId(clinicId);
+}
+
+public List<AdoptionApplication> getAdoptionApplicationsByShelterId(int shelterId) {
+    return adoptionApplicationDAO.getApplicationsByShelterId(shelterId);
+}
+public List<MedicalCheckRequest> getMedicalCheckRequestsByShelterId(int shelterId) {
+    return medicalCheckRequestDAO.getMedicalCheckRequestsByShelterId(shelterId);
+}
+
+public boolean cancelMedicalCheckRequest(int requestId, int shelterAdminUserId) {
+    return medicalCheckRequestDAO.cancelMedicalCheckRequest(requestId, shelterAdminUserId);
+}
+public boolean withdrawSurrenderRequest(int requestId, int userId) {
+    return surrenderRequestDAO.withdrawSurrenderRequest(requestId, userId);
+}
+
 }

@@ -36,8 +36,8 @@
                           <Component id="SubmitMedicalButton" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="LogoutButton" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="77" max="32767" attributes="0"/>
-                      <Component id="MedicalScrollPane" min="-2" pref="482" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="MedicalScrollPane" pref="1178" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
