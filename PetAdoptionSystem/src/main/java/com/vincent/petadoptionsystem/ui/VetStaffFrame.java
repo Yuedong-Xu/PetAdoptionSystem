@@ -5,8 +5,12 @@
 package com.vincent.petadoptionsystem.ui;
 
 /**
+ * Dashboard for veterinary staff users.
+ * This class allows veterinary staff to view medical check requests
+ * and submit medical reports for pets under examination.
  *
- * @author vincent
+ * @author Yuedong Xu
+ * @version demo final version
  */
 import com.vincent.petadoptionsystem.model.MedicalCheckRequest;
 import com.vincent.petadoptionsystem.model.User;

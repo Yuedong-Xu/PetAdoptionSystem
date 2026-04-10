@@ -5,8 +5,11 @@
 package com.vincent.petadoptionsystem.dao;
 
 /**
+ * Data access object for adopter profile operations.
+ * This class is responsible for retrieving and saving adopter profile information.
  *
- * @author vincent
+ * @author Yuedong Xu
+ * @version demo final version
  */
 
 import com.vincent.petadoptionsystem.db.DatabaseManager;

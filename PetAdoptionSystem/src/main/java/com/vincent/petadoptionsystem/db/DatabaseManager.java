@@ -3,10 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.vincent.petadoptionsystem.db;
-
 /**
+ * Utility class for database connection management.
+ * This class provides methods to open and close JDBC connections to the MySQL database.
  *
  * @author Yuedong Xu
+ * @version demo final version
  */
 import java.sql.Connection;
 import java.sql.DriverManager;

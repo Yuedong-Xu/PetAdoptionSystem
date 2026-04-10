@@ -5,7 +5,14 @@
 package com.vincent.petadoptionsystem.ui;
 
 
-
+/**
+ * Dashboard for adopter users.
+ * This class allows adopters to manage their profile, browse available pets,
+ * submit adoption applications, view application status, and withdraw applications.
+ *
+ * @author Yuedong Xu
+ * @version demo final version
+ */
 
 import com.vincent.petadoptionsystem.model.AdoptionApplication;
 import com.vincent.petadoptionsystem.model.Pet;
@@ -21,10 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
-/**
- *
- * @author vincent
- */
+
 public class AdopterFrame extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AdopterFrame.class.getName());

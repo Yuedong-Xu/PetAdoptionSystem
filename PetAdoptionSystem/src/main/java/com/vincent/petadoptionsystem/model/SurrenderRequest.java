@@ -5,8 +5,12 @@
 package com.vincent.petadoptionsystem.model;
 
 /**
+ * Model class representing a pet surrender request.
+ * This class stores pet details, surrender reason, request status,
+ * and processing information.
  *
  * @author Yuedong Xu
+ * @version demo final version
  */
 
 public class SurrenderRequest {

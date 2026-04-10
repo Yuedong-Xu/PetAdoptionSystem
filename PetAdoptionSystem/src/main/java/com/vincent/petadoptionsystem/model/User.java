@@ -5,10 +5,12 @@
 package com.vincent.petadoptionsystem.model;
 
 /**
+ * Model class representing a system user.
+ * This class stores user identity, login credentials, role, and organization information.
  *
  * @author Yuedong Xu
+ * @version demo final version
  */
-
 
 public class User {
     private int userId;

@@ -5,8 +5,11 @@
 package com.vincent.petadoptionsystem.dao;
 
 /**
+ * Data access object for pet-related database operations.
+ * This class retrieves pet records, especially pets available for adoption.
  *
  * @author Yuedong Xu
+ * @version demo final version
  */
 
 import com.vincent.petadoptionsystem.db.DatabaseManager;

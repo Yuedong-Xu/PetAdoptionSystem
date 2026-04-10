@@ -5,8 +5,12 @@
 package com.vincent.petadoptionsystem.service;
 
 /**
+ * Core service layer of the Pet Adoption System.
+ * This singleton class coordinates business logic and connects the UI layer
+ * with DAO classes for authentication, surrender, medical check, and adoption workflows.
  *
  * @author Yuedong Xu
+ * @version demo final version
  */
 
 

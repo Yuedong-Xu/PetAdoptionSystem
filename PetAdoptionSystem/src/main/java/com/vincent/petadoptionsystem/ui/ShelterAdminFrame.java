@@ -3,6 +3,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.vincent.petadoptionsystem.ui;
+
+/**
+ * Dashboard for shelter administrator users.
+ * This class supports reviewing surrender requests, reviewing adoption applications,
+ * sending medical check requests, reviewing medical requests, and managing related statuses.
+ *
+ * @author Yuedong Xu
+ * @version demo final version
+ */
 import com.vincent.petadoptionsystem.model.AdoptionApplication;
 import com.vincent.petadoptionsystem.model.User;
 import com.vincent.petadoptionsystem.service.PetAdoptionSystem;
@@ -11,10 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import com.vincent.petadoptionsystem.model.SurrenderRequest;
 import com.vincent.petadoptionsystem.model.MedicalCheckRequest;
-/**
- *
- * @author Yuedong Xu
- */
+
 public class ShelterAdminFrame extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ShelterAdminFrame.class.getName());

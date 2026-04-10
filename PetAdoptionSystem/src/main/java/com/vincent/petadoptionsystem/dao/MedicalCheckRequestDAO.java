@@ -5,8 +5,12 @@
 package com.vincent.petadoptionsystem.dao;
 
 /**
+ * Data access object for medical check request operations.
+ * This class manages medical request creation, retrieval, cancellation,
+ * and medical report submission with related pet status updates.
  *
- * @author vincent
+ * @author Yuedong Xu
+ * @version demo final version
  */
 
 import com.vincent.petadoptionsystem.db.DatabaseManager;
@@ -422,12 +426,11 @@ public class MedicalCheckRequestDAO {
             return false;
         }
 
-        String updateRequestSql = "UPDATE MedicalCheckRequests " +
-                                  "SET Status = 'Cancelled', HandledByUserId = ?, ProcessedAt = NOW() " +
+        String cancelRequestSql = "UPDATE MedicalCheckRequests " +
+                                  "SET Status = 'Cancelled', ProcessedAt = NOW() " +
                                   "WHERE MedicalCheckRequestId = ?";
-        try (PreparedStatement requestPs = conn.prepareStatement(updateRequestSql)) {
-            requestPs.setInt(1, shelterAdminUserId);
-            requestPs.setInt(2, requestId);
+        try (PreparedStatement requestPs = conn.prepareStatement(cancelRequestSql)) {
+            requestPs.setInt(1, requestId);
 
             int rows = requestPs.executeUpdate();
             if (rows == 0) {

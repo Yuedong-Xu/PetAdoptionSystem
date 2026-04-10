@@ -5,8 +5,12 @@
 package com.vincent.petadoptionsystem.dao;
 
 /**
+ * Data access object for surrender request operations.
+ * This class handles pet surrender submission, request retrieval, review,
+ * approval or rejection, and withdrawal logic.
  *
  * @author Yuedong Xu
+ * @version demo final version
  */
 
 import com.vincent.petadoptionsystem.db.DatabaseManager;

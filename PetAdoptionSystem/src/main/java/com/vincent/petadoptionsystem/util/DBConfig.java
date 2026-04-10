@@ -3,10 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.vincent.petadoptionsystem.util;
-
 /**
+ * Configuration class for database connection settings.
+ * This class stores the JDBC URL, database username, and password used by the system.
  *
  * @author Yuedong Xu
+ * @version demo final version
  */
 public class DBConfig {
     public static final String URL = "jdbc:mysql://localhost:3306/pet_adoption_system";

@@ -5,8 +5,11 @@
 package com.vincent.petadoptionsystem.dao;
 
 /**
+ * Data access object for adoption application operations.
+ * This class manages application creation, retrieval, review, update, and withdrawal.
  *
- * @author yuedong Xu
+ * @author Yuedong Xu
+ * @version demo final version
  */
 
 import com.vincent.petadoptionsystem.db.DatabaseManager;

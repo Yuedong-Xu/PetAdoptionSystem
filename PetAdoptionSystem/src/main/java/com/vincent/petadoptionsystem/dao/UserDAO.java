@@ -5,10 +5,12 @@
 package com.vincent.petadoptionsystem.dao;
 
 /**
+ * Data access object for user-related database operations.
+ * This class handles user authentication and retrieves user information from the database.
  *
  * @author Yuedong Xu
+ * @version demo final version
  */
-
 
 import com.vincent.petadoptionsystem.db.DatabaseManager;
 import com.vincent.petadoptionsystem.model.User;

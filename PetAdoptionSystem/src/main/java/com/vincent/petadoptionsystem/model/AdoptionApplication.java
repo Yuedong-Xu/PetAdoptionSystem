@@ -5,8 +5,11 @@
 package com.vincent.petadoptionsystem.model;
 
 /**
+ * Model class representing an adoption application.
+ * This class stores adopter information, pet information, and application status.
  *
  * @author Yuedong Xu
+ * @version demo final version
  */
 
 

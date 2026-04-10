@@ -37,7 +37,7 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="211" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="AgeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="SpeciesLabel" min="-2" max="-2" attributes="0"/>
@@ -48,41 +48,24 @@
                           <Component id="WeightLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="GenderLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
+                      <EmptySpace min="-2" pref="173" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="173" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="PetNameTextField" min="-2" pref="219" max="-2" attributes="0"/>
-                                  <Component id="SpeciesComboBox" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="GenderComboBox" min="-2" max="-2" attributes="0"/>
-                                  <Component id="HealthStatusComboBox" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="ColorTextField" max="32767" attributes="0"/>
-                                      <Component id="DescriptionScrollPane" alignment="0" pref="219" max="32767" attributes="0"/>
-                                      <Component id="WeightTextField" max="32767" attributes="0"/>
-                                  </Group>
-                                  <Component id="BreedTextField" alignment="0" min="-2" pref="219" max="-2" attributes="0"/>
-                                  <Component id="AgeSpinner" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="ReasonComboBox" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="-2" pref="181" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="PetNameTextField" min="-2" pref="219" max="-2" attributes="0"/>
+                          <Component id="SpeciesComboBox" min="-2" max="-2" attributes="0"/>
+                          <Component id="BreedTextField" alignment="0" min="-2" pref="219" max="-2" attributes="0"/>
+                          <Component id="AgeSpinner" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="GenderComboBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="WeightTextField" alignment="0" min="-2" pref="219" max="-2" attributes="0"/>
+                          <Component id="ColorTextField" alignment="0" min="-2" pref="219" max="-2" attributes="0"/>
+                          <Component id="HealthStatusComboBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="ReasonComboBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="DescriptionScrollPane" min="-2" pref="219" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="PetNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="BreedLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                  </Group>
+                  <Component id="PetNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="BreedLabel" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
+              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
           </Group>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="321" max="-2" attributes="0"/>

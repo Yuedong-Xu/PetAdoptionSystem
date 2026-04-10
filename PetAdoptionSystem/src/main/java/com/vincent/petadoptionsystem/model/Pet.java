@@ -5,10 +5,12 @@
 package com.vincent.petadoptionsystem.model;
 
 /**
+ * Model class representing a pet in the system.
+ * This class stores the basic pet profile, health information, and adoption status.
  *
  * @author Yuedong Xu
+ * @version demo final version
  */
-
 public class Pet {
     private int petId;
     private String name;

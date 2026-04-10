@@ -5,8 +5,12 @@
 package com.vincent.petadoptionsystem.model;
 
 /**
+ * Model class representing a medical check request.
+ * This class stores the request information exchanged between the shelter
+ * and the veterinary clinic for pet health examination.
  *
  * @author Yuedong Xu
+ * @version demo final version
  */
 
 public class MedicalCheckRequest {

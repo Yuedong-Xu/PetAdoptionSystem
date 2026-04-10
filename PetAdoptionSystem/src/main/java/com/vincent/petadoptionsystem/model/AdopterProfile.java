@@ -5,8 +5,11 @@
 package com.vincent.petadoptionsystem.model;
 
 /**
+ * Model class representing an adopter profile.
+ * This class stores additional adopter information used for adoption screening.
  *
  * @author Yuedong Xu
+ * @version demo final version
  */
 
 

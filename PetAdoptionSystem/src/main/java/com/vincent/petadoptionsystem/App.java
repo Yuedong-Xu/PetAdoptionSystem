@@ -5,8 +5,11 @@
 package com.vincent.petadoptionsystem;
 
 /**
+ * Entry point of the Pet Adoption System application.
+ * This class launches the main login window and starts the Swing-based system demo.
  *
  * @author Yuedong Xu
+ * @version demo final version
  */
 
 
