@@ -1,526 +1,131 @@
-# PetAdoptionSystem
-A digital platform for managing pet surrender, health check, and adoption workflows.
+# Pet Adoption System
 
 ## Project Overview
-This project is a digital pet adoption system that helps shelters and veterinary clinics work together with surrender owners and adopters. The system manages pet surrender requests, medical check processes, and adoption applications in one shared platform.
+The Pet Adoption System is a Java Swing application designed to support the pet surrender, medical check, and adoption process in a more organized and efficient way.
 
-## Participating Organizations
-- Pet Adoption Agency / Shelter
+This system connects multiple parties involved in pet rescue and adoption, including surrender owners, adopters, shelter administrators, and veterinary staff. It helps reduce communication problems, improves workflow efficiency, and supports better protection and placement for pets.
+
+## Problem Statement
+Without a centralized system, pet rescue and adoption can be inconvenient and inefficient. People who want to adopt may not know where to find pets, people who need to surrender pets may not know where to send them, and rescue organizations may struggle to coordinate screening and health checks.
+
+This system solves these problems by providing one platform that supports:
+- pet surrender request management
+- medical check request workflow
+- adoption application workflow
+- multi-role communication and status tracking
+
+Overall, it makes the rescue and adoption process more organized, reliable, and efficient.
+
+## Organizations and Roles
+This project includes 2 organizations:
+- Shelter
 - Veterinary Clinic
 
-## User Roles
+This project includes 4 main roles:
 - Surrender Owner
 - Adopter
 - Shelter Admin
 - Vet Staff
 
-## Main Workflow
-
-1. Surrender Process
-- A surrender owner submits a surrender request
-- Shelter admin reviews the request
-- If approved, the pet is accepted and a pet record is created
-
-2. Medical Check Process
-- Shelter sends the pet to a veterinary clinic
-- Vet staff performs a medical check
-- Vet updates the health record
-- Pet status is updated to "Ready for Adoption"
-
-3. Adoption Process
-- Adopter browses available pets
-- Adopter submits an adoption application
-- Shelter admin reviews the application
-- If approved, the pet status is updated to "Adopted"
-
-## Role Definition
-- Surrender Owner
-
-Register and manage personal profile
-Fill in pet information
-Submit a pet surrender request
-View surrender request status
-
-- Shelter Admin
-
-Review surrender requests
-Accept or reject pet intake
-Create pet records
-Send pets for medical check
-Review adoption applications
-Approve or reject adoption requests
-Update pet status
-
-- Vet Staff
-
-View medical check requests
-Enter examination results
-Update pet health status
-Submit medical reports back to the shelter
-
-- Adopter
-
-Register and manage personal profile
-Set adoption preferences
-Browse available pets
-Submit adoption applications
-View adoption application status
-
-## Status
-
-Pet status
--submitted
--accepted
--under medical check
--ready for adoption
--adoption pending
--adopted
-
-Surrender request status
--submitted
--approved
--rejected
-
-Adoption request status
--submitted 
--approved
--rejected
--completed
-
-
-## Use Case Diagram
-
-- Surrender Owner
-Register/Manage Profile
-Submit Surrender Request
-Enter Pet Information
-View Request Status
-
-- Shelter Admin
-Review Surrender Request
-Accept/Reject Pet Intake
-Create Pet Record
-Send Medical Check Request
-Review Medical Report
-Manage Pet Status
-Review Adoption Applications
-Approve / Reject Adoption
-
-- Vet Staff
-View Medical Check Requests
-Enter Examination Results
-Update Pet Health Status
-Submit Medical Report
-
-
-- Adopter
-Register/Manage Profile
-Browse Available Pets
-Submit Adoption Application
-View Adoption Status
-
-
-## Class Diagram
-
-1）UI 
-MainFrame
-
-Attributes
-
-system: PetAdoptionSystem
-cardLayout: CardLayout
-mainPanel: JPanel
-
-Methods
-
-MainFrame()
-switchPanel(panelName: String)
-initComponents()
-LoginPanel
-
-Attributes
-
-usernameField: JTextField
-passwordField: JPasswordField
-system: PetAdoptionSystem
-mainFrame: MainFrame
-
-Methods
-
-login()
-clearFields()
-SurrenderOwnerPanel
-
-Attributes
-
-system: PetAdoptionSystem
-currentUser: SurrenderOwner
-petTable: JTable
-
-Methods
-
-submitSurrenderRequest()
-enterPetInformation()
-viewRequestStatus()
-AdopterPanel
-
-Attributes
-
-system: PetAdoptionSystem
-currentUser: Adopter
-petTable: JTable
-
-Methods
-
-browsePets()
-submitAdoptionApplication()
-viewAdoptionStatus()
-ShelterAdminPanel
-
-Attributes
-
-system: PetAdoptionSystem
-currentUser: ShelterAdmin
-requestTable: JTable
-
-Methods
-
-reviewSurrenderRequests()
-createPetRecord()
-sendMedicalCheckRequest()
-reviewAdoptionApplications()
-updatePetStatus()
-VetStaffPanel
-
-Attributes
-
-system: PetAdoptionSystem
-currentUser: VetStaff
-requestTable: JTable
-
-Methods
-
-viewMedicalCheckRequests()
-enterExaminationResults()
-updatePetHealthStatus()
-submitMedicalReport()
-
-
-2）Core
-PetAdoptionSystem <<Singleton>>
-
-Attributes
-
-instance: PetAdoptionSystem
-userDAO: UserDAO
-organizationDAO: OrganizationDAO
-petDAO: PetDAO
-surrenderRequestDAO: SurrenderRequestDAO
-adoptionApplicationDAO: AdoptionApplicationDAO
-medicalCheckRequestDAO: MedicalCheckRequestDAO
-medicalReportDAO: MedicalReportDAO
-
-Methods
-
-getInstance(): PetAdoptionSystem
-authenticateUser(email: String, password: String): User
-getAvailablePets(): List<Pet>
-createSurrenderRequest(...)
-createAdoptionApplication(...)
-createMedicalCheckRequest(...)
-createMedicalReport(...)
-updateRequestStatus(...)
-
-3）DAO 
-UserDAO
-
-Attributes
-
-db: DatabaseManager
-
-Methods
-
-createUser(user: User): void
-getUserById(id: int): User
-getUserByEmail(email: String): User
-updateUser(user: User): void
-deleteUser(id: int): void
-OrganizationDAO
-createOrganization()
-getOrganizationById()
-getAllOrganizations()
-updateOrganization()
-deleteOrganization()
-PetDAO
-createPet()
-getPetById()
-getAllPets()
-getAvailablePets()
-updatePet()
-deletePet()
-SurrenderRequestDAO
-createRequest()
-getRequestById()
-getAllRequests()
-updateRequest()
-deleteRequest()
-AdoptionApplicationDAO
-createApplication()
-getApplicationById()
-getAllApplications()
-updateApplication()
-deleteApplication()
-MedicalCheckRequestDAO
-createRequest()
-getRequestById()
-getAllRequests()
-updateRequest()
-deleteRequest()
-MedicalReportDAO
-createReport()
-getReportById()
-getReportsByPetId()
-updateReport()
-deleteReport()
-
-4）Database 
-DatabaseManager
-
-Attributes
-
-connection: Connection
-
-Methods
-
-connect(): void
-closeConnection(): void
-executeQuery(sql: String): ResultSet
-executeUpdate(sql: String): int
-
-5）Model 
-User <<abstract>>
-
-Attributes
-
-userId: int
-name: String
-email: String
-password: String
-phone: String
-address: String
-
-Methods
-
-login()
-updateProfile()
-Adopter
-
-Attributes
-
-preference: String
-housingType: String
-
-Methods
-
-submitAdoptionApplication()
-SurrenderOwner
-
-Attributes
-
-ownerNote: String
-
-Methods
-
-submitSurrenderRequest()
-ShelterAdmin
-
-Attributes
-
-employeeId: String
-
-Methods
-
-reviewRequest()
-updatePetStatus()
-VetStaff
-
-Attributes
-
-staffId: String
-
-Methods
-
-createMedicalReport()
-updateHealthStatus()
-Organization <<abstract>>
-
-Attributes
-
-organizationId: int
-name: String
-address: String
-phone: String
-
-Methods
-
-updateOrganizationInfo()
-Shelter
-
-Methods
-
-acceptPet()
-publishPet()
-VeterinaryClinic
-
-Methods
-
-performCheckup()
-Pet
-
-Attributes
-
-petId: int
-name: String
-species: String
-breed: String
-age: int
-gender: String
-healthStatus: String
-adoptionStatus: String
-intakeDate: Date
-
-Methods
-
-updateHealthStatus()
-updateAdoptionStatus()
-WorkRequest <<abstract>>
-
-Attributes
-
-requestId: int
-requestDate: Date
-status: String
-description: String
-
-Methods
-
-createRequest()
-updateStatus()
-SurrenderRequest
-
-Attributes
-
-reason: String
-AdoptionApplication
-
-Attributes
-
-adopterNote: String
-MedicalCheckRequest
-
-Attributes
-
-priority: String
-MedicalReport
-
-Attributes
-
-reportId: int
-examDate: Date
-diagnosis: String
-vaccinationStatus: String
-recommendation: String
-resultStatus: String
-
-Methods
-
-generateReport()
-submitReport()
-
-
-## Database Schema
-
-Users
-UserId (PK)
-Name
-Gender
-Age
-Email
-Password
-Phone
-Address
-Role
-OrganizationId (FK, nullable)
-
-AdopterProfiles
-AdopterProfileId (PK)
-UserId (FK, unique)
-MonthlyIncome
-LivingArea
-NumberOfPets
-PetRaisingExperience
-NumberOfPeople
-PreferredPetType
-
-Organizations
-OrganizationId (PK)
-Name
-Phone
-Address
-OrganizationType
-
-Pets
-PetId (PK)
-Name
-Species
-Breed
-Age
-Gender
-Weight
-Color
-HealthStatus
-HealthCheckStatus
-AdoptionStatus
-IntakeDate
-ShelterId (FK)
-
-SurrenderRequests
-SurrenderRequestId (PK)
-UserId (FK)
-PetId (FK)
-RequestDate
-Status
-Description
-Reason
-
-AdoptionApplications
-ApplicationId (PK)
-UserId (FK)
-PetId (FK)
-ApplicationDate
-Status
-Description
-
-MedicalCheckRequests
-MedicalCheckRequestId (PK)
-PetId (FK)
-ShelterId (FK)
-ClinicId (FK)
-RequestDate
-Status
-Description
-
-MedicalReports
-ReportId (PK)
-PetId (FK)
-VetStaffUserId (FK)
-MedicalCheckRequestId (FK, nullable)
-ExamDate
-Diagnosis
-VaccinationStatus
-Recommendation
-ResultStatus
-
-
+## Main Features
+### Surrender Owner
+- Submit surrender request
+- Enter pet information
+- View surrender request status
+- Withdraw surrender request
+
+### Adopter
+- Register / manage adopter profile
+- Browse available pets
+- Submit adoption application
+- View adoption application status
+- Withdraw adoption application
+
+### Shelter Admin
+- Review surrender requests
+- Approve or reject pet intake
+- Send medical check request
+- Review adoption applications
+- Approve or reject adoption applications
+- Review medical check requests
+- Cancel medical check requests
+
+### Vet Staff
+- View medical check requests
+- Submit medical report
+- Update pet health status through report processing
+
+## System Design
+The system follows a layered design:
+- **UI Layer**: Java Swing frames for each role
+- **Service Layer**: `PetAdoptionSystem` singleton for business logic
+- **DAO Layer**: DAO classes for database operations
+- **Model Layer**: Java model classes representing entities
+- **Database Layer**: MySQL database with JDBC connectivity
+
+## Technologies Used
+- Java
+- Java Swing
+- MySQL
+- JDBC
+- MySQL Workbench
+- NetBeans
+
+## Database
+The system uses MySQL as the backend database with JDBC connection support.
+
+Main database tables include:
+- Organizations
+- Users
+- AdopterProfiles
+- Pets
+- SurrenderRequests
+- AdoptionApplications
+- MedicalCheckRequests
+- MedicalReports
+
+## Diagrams
+This project includes:
+- Class Diagram
+- Use Case Diagram
+
+## Demo Video
+Presentation + Demo Video Link:  
+(https://drive.google.com/file/d/1tV_tyGFngmxsXqkBDvl726vneMH-5ufh/view?usp=sharing)
+
+## Screenshots
+This repository includes:
+- screenshots of all major application windows
+- screenshots of database CRUD activity in MySQL Workbench
+
+## How to Run
+1. Open MySQL Workbench and run `schema.sql`
+2. Insert demo data into the database
+3. Update database connection settings in `DBConfig.java` if needed
+4. Open the project in NetBeans
+5. Run `App.java`
+6. Log in using demo accounts
+
+## Demo Accounts
+- Adopter 1: `adopter1@test.com` / `123456`
+- Adopter 2: `adopter2@test.com` / `123456`
+- Surrender Owner: `owner@test.com` / `123456`
+- Shelter Admin: `shelter@test.com` / `123456`
+- Vet Staff: `vet@test.com` / `123456`
+
+## Repository Contents
+- Java source code
+- `schema.sql`
+- Class Diagram
+- Use Case Diagram
+- Application screenshots
+- Database CRUD screenshots
+- Demo video link
+
+## Author
+Yuedong Xu
+
+## Version
+demo final version
 
 
